@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 19: Quyền Được Bảo Đảm An Toàn Và Bí Mật Thư Tín, Điện Thoại, Điện Tín - Ghi Bài Tương Tác</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Be Vietnam Pro"', 'sans-serif'],
+                        hand: ['"Patrick Hand"', 'cursive'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background: radial-gradient(circle at top left, #f0f9ff 0%, #e0f2fe 45%, #f8fafc 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Notebook Lined Paper Background */
+        .notebook-paper {
+            background-color: #fffef9;
+            background-image: 
+                linear-gradient(90deg, transparent 49px, #ef4444 49px, #ef4444 51px, transparent 51px),
+                linear-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 100% 2.4rem;
+            line-height: 2.4rem;
+            box-shadow: 0 20px 45px -15px rgba(15, 23, 42, 0.15), 0 0 0 1px rgba(148, 163, 184, 0.25);
+        }
+
+        @media (max-width: 640px) {
+            .notebook-paper {
+                background-image: 
+                    linear-gradient(90deg, transparent 24px, #ef4444 24px, #ef4444 26px, transparent 26px),
+                    linear-gradient(#e2e8f0 1px, transparent 1px);
+            }
+        }
+
+        /* Floating and Pulse Animations */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1.5deg); }
+        }
+        .animate-float {
+            animation: floatSlow 3.5s ease-in-out infinite;
+        }
+
+        @keyframes shieldPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.4)); }
+            50% { transform: scale(1.06); filter: drop-shadow(0 0 22px rgba(37, 99, 235, 0.75)); }
+        }
+        .animate-shield {
+            animation: shieldPulse 2.4s ease-in-out infinite;
+        }
+
+        @keyframes stampSlam {
+            0% { transform: scale(2.8) rotate(-25deg); opacity: 0; }
+            70% { transform: scale(0.9) rotate(-12deg); opacity: 1; }
+            85% { transform: scale(1.05) rotate(-12deg); }
+            100% { transform: scale(1) rotate(-12deg); opacity: 1; }
+        }
+        .stamp-active {
+            animation: stampSlam 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        @keyframes radarWave {
+            0% { transform: scale(0.8); opacity: 0.8; }
+            100% { transform: scale(2.1); opacity: 0; }
+        }
+        .radar-ring {
+            animation: radarWave 2s infinite ease-out;
+        }
+
+        /* Keyword Highlight Effect */
+        .kw-mark {
+            transition: all 0.35s ease;
+            border-radius: 0.35rem;
+            padding: 0.05rem 0.3rem;
+        }
+        .kw-active {
+            background: linear-gradient(120deg, #fef08a 0%, #fde047 100%);
+            color: #854d0e;
+            font-weight: 700;
+            box-shadow: 0 2px 6px rgba(234, 179, 8, 0.25);
+        }
+        .kw-danger-active {
+            background: linear-gradient(120deg, #fecdd3 0%, #fda4af 100%);
+            color: #9f1239;
+            font-weight: 700;
+            box-shadow: 0 2px 6px rgba(225, 29, 72, 0.2);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased selection:bg-blue-600 selection:text-white pb-16">
+
+    <header class="lg:sticky lg:top-0 z-40 backdrop-blur-md bg-white/95 border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+                <!-- School & Lesson Info -->
+                <div class="flex items-start sm:items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-md shadow-blue-500/20 shrink-0">
+                        <i class="fa-solid fa-scale-balanced text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wider text-blue-700">
+                            <span class="bg-blue-100 px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-school mr-1"></i>THPT Thanh Bình 2</span>
+                            <span class="bg-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded-full"><i class="fa-solid fa-chalkboard-user mr-1"></i>GV: Nguyễn Minh Thông</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-2.5 py-0.5 rounded-full">Lớp 11A1 • GDKT & PL</span>
+                        </div>
+                        <h1 class="text-base sm:text-lg md:text-xl font-extrabold text-slate-900 mt-1 leading-snug">
+                            BÀI 19: QUYỀN ĐƯỢC BẢO ĐẢM AN TOÀN VÀ BÍ MẬT VỀ THƯ TÍN, ĐIỆN THOẠI, ĐIỆN TÍN
+                        </h1>
+                    </div>
+                </div>
+
+                <!-- Classroom Quick Controls -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <!-- Timer Widget -->
+                    <div class="flex items-center bg-slate-100 border border-slate-200 rounded-xl px-3 py-1.5 gap-2">
+                        <i class="fa-regular fa-clock text-blue-600"></i>
+                        <span id="timerDisplay" class="font-mono font-bold text-sm text-slate-800">05:00</span>
+                        <button onclick="toggleTimer()" id="timerBtn" class="text-xs bg-blue-600 hover:bg-blue-700 text-white font-semibold px-2.5 py-1 rounded-lg transition" title="Bắt đầu/Tạm dừng hẹn giờ ghi bài">
+                            <i class="fa-solid fa-play"></i>
+                        </button>
+                        <button onclick="resetTimer()" class="text-xs text-slate-500 hover:text-slate-800 px-1.5 py-1 rounded-lg transition" title="Đặt lại 5 phút">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Highlight Keywords Button -->
+                    <button onclick="toggleKeywords()" id="kwBtn" class="flex items-center gap-1.5 text-xs sm:text-sm font-semibold px-3 py-2 rounded-xl bg-amber-100 text-amber-900 border border-amber-300 hover:bg-amber-200 transition shadow-sm">
+                        <i class="fa-solid fa-highlighter"></i>
+                        <span>Tô sáng từ khóa</span>
+                    </button>
+
+                    <!-- Sound Toggle -->
+                    <button onclick="toggleSound()" id="soundBtn" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition" title="Bật/Tắt âm thanh tương tác">
+                        <i class="fa-solid fa-volume-high" id="soundIcon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-3 pt-2 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex flex-wrap gap-1.5" role="tablist">
+                    <button onclick="switchMode('interactive')" id="tab-interactive" class="mode-tab active-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-blue-600 text-white shadow-sm transition">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>1. Hoạt Hình & Giải Thích Ghi Bài</span>
+                    </button>
+                    <button onclick="switchMode('notebook')" id="tab-notebook" class="mode-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                        <i class="fa-solid fa-book-open-reader"></i>
+                        <span>2. Vở Ghi Bài Trình Chiếu</span>
+                    </button>
+                    <button onclick="switchMode('mindmap')" id="tab-mindmap" class="mode-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                        <i class="fa-solid fa-diagram-project"></i>
+                        <span>3. Sơ Đồ Tư Duy Tóm Tắt</span>
+                    </button>
+                    <button onclick="switchMode('practice')" id="tab-practice" class="mode-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>4. Điền Khuyết Nhớ Nhanh</span>
+                    </button>
+                </div>
+
+                <!-- Progress Tracking -->
+                <div class="flex items-center gap-2.5 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
+                    <span class="text-xs font-semibold text-slate-600 whitespace-nowrap">Tiến độ ghi bài:</span>
+                    <div class="w-28 sm:w-36 h-2.5 bg-slate-200 rounded-full overflow-hidden">
+                        <div id="noteProgressBar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <span id="noteProgressText" class="text-xs font-bold text-emerald-700">0/5 ý</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+
+        <!-- ==========================================
+             MODE 1: INTERACTIVE ANIMATION & NOTE TAKING
+             ========================================== -->
+        <section id="view-interactive" class="space-y-8">
+            <!-- Guide Banner -->
+            <div class="bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-900 rounded-3xl p-5 sm:p-6 text-white shadow-xl relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 w-52 h-52 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                    <div class="space-y-1.5 max-w-3xl">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-blue-100 text-xs font-semibold">
+                            <i class="fa-solid fa-lightbulb text-amber-300"></i>
+                            <span>Hướng dẫn tương tác trên lớp</span>
+                        </div>
+                        <h2 class="text-lg sm:text-xl font-bold">
+                            Khám phá mô phỏng hoạt hình & Ghi chép nội dung trọng tâm vào vở
+                        </h2>
+                        <p class="text-xs sm:text-sm text-blue-100 leading-relaxed">
+                            Nhấp vào các biểu tượng trong từng mô phỏng để kích hoạt hiệu ứng pháp lý trực quan, sau đó tích chọn <strong>"Đã ghi vào vở"</strong> hoặc bật hiệu ứng <strong>Gõ chữ từng ý</strong> để học sinh theo dõi và ghi bài.
+                        </p>
+                    </div>
+                    <div class="flex flex-wrap gap-2 shrink-0">
+                        <button onclick="expandAllNotes()" class="px-4 py-2.5 rounded-xl bg-white text-blue-900 font-bold text-xs sm:text-sm hover:bg-blue-50 transition shadow-md flex items-center gap-2">
+                            <i class="fa-solid fa-eye"></i>
+                            <span>Hiện toàn bộ ý ghi bài</span>
+                        </button>
+                        <button onclick="switchMode('notebook')" class="px-4 py-2.5 rounded-xl bg-amber-400 text-slate-900 font-bold text-xs sm:text-sm hover:bg-amber-300 transition shadow-md flex items-center gap-2">
+                            <i class="fa-solid fa-expand"></i>
+                            <span>Mở Chế Độ Bảng Lớn</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART 1: QUY ĐỊNH CỦA PHÁP LUẬT -->
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200/80 overflow-hidden">
+                <!-- Section Header -->
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div class="flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center font-extrabold text-lg">1</span>
+                        <h3 class="text-base sm:text-lg font-extrabold tracking-wide">
+                            Một số quy định cơ bản của pháp luật về quyền được bảo đảm an toàn và bí mật thư tín, điện thoại, điện tín của công dân
+                        </h3>
+                    </div>
+                    <span class="text-xs bg-white/20 px-3 py-1 rounded-full font-semibold self-start sm:self-center shrink-0">
+                        3 nội dung cần ghi bài
+                    </span>
+                </div>
+
+                <!-- Interactive Grid for Part 1 -->
+                <div class="p-5 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    <!-- Left Column: Interactive Visual Stage (5 cols) -->
+                    <div class="lg:col-span-5 bg-slate-900 rounded-2xl p-5 text-white relative overflow-hidden shadow-inner border border-slate-800">
+                        <div class="flex items-center justify-between border-b border-slate-700/80 pb-3 mb-4">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                                <span class="text-xs font-bold uppercase tracking-wider text-blue-300">Mô phỏng Hoạt Hình Mục 1</span>
+                            </div>
+                            <span id="sim1StatusBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 font-semibold">
+                                Đang bảo vệ
+                            </span>
+                        </div>
+
+                        <!-- Scene Selector Buttons -->
+                        <div class="grid grid-cols-3 gap-2 mb-4">
+                            <button onclick="setSim1Scene(1)" id="sim1Btn1" class="sim1-btn py-2 px-2 rounded-xl text-xs font-bold bg-blue-600 text-white border border-blue-400 transition flex flex-col items-center gap-1">
+                                <i class="fa-solid fa-shield-halved text-base"></i>
+                                <span>1.1 Quyền Bảo Mật</span>
+                            </button>
+                            <button onclick="setSim1Scene(2)" id="sim1Btn2" class="sim1-btn py-2 px-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700 transition flex flex-col items-center gap-1">
+                                <i class="fa-solid fa-ban text-base text-rose-400"></i>
+                                <span>1.2 Nghiêm Cấm</span>
+                            </button>
+                            <button onclick="setSim1Scene(3)" id="sim1Btn3" class="sim1-btn py-2 px-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700 transition flex flex-col items-center gap-1">
+                                <i class="fa-solid fa-file-shield text-base text-amber-400"></i>
+                                <span>1.3 Ngoại Lệ</span>
+                            </button>
+                        </div>
+
+                        <!-- Animated Stage Area -->
+                        <div id="sim1Stage" class="min-h-[260px] flex flex-col items-center justify-center bg-gradient-to-b from-slate-800/90 to-slate-950 rounded-2xl p-4 border border-slate-700/70 relative overflow-hidden">
+                            <!-- Dynamic Content injected by JS -->
+                        </div>
+
+                        <!-- Interactive Action Prompt -->
+                        <div id="sim1Caption" class="mt-3 text-center text-xs text-slate-300 bg-slate-800/90 rounded-xl p-2.5 border border-slate-700">
+                            Nhấp vào các biểu tượng trên màn hình mô phỏng để tương tác!
+                        </div>
+                    </div>
+
+                    <!-- Right Column: 3 Bullet Points to Write in Notebook (7 cols) -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <div class="flex items-center justify-between text-xs text-slate-500 px-1">
+                            <span><i class="fa-solid fa-pen-nib text-blue-600 mr-1"></i>Nội dung chuẩn học sinh ghi vào vở:</span>
+                            <button onclick="typewriteSection(1)" class="text-blue-600 hover:text-blue-800 font-bold flex items-center gap-1">
+                                <i class="fa-solid fa-keyboard"></i> Hiệu ứng viết từng chữ Mục 1
+                            </button>
+                        </div>
+
+                        <!-- Note Card 1.1 -->
+                        <div id="noteCard-1" onclick="setSim1Scene(1)" class="note-card group cursor-pointer rounded-2xl p-4 sm:p-5 bg-blue-50/60 hover:bg-blue-50 border-2 border-blue-500 transition-all shadow-sm relative">
+                            <div class="flex items-start gap-3.5">
+                                <button onclick="event.stopPropagation(); toggleNoteDone(1)" id="checkBtn-1" class="mt-1 w-6 h-6 rounded-lg border-2 border-blue-500 bg-white flex items-center justify-center text-transparent hover:border-emerald-600 transition shrink-0" title="Đánh dấu đã ghi bài xong">
+                                    <i class="fa-solid fa-check text-xs"></i>
+                                </button>
+                                <div class="flex-1">
+                                    <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                                        <span class="text-xs font-extrabold uppercase tracking-wider text-blue-700 bg-blue-100 px-2.5 py-0.5 rounded-md">
+                                            Ý ghi bài 1.1 • Quyền công dân
+                                        </span>
+                                        <button onclick="event.stopPropagation(); openIllustrationModal(1)" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition transform hover:scale-105">
+                                            <i class="fa-solid fa-clapperboard"></i>
+                                            <span>Xem hoạt hình minh họa</span>
+                                        </button>
+                                    </div>
+                                    <p id="noteText-1" class="text-slate-900 font-medium text-base sm:text-lg leading-relaxed">
+                                        - Công dân có <span class="kw-mark kw-active">quyền được bảo đảm an toàn và bí mật</span> <span class="kw-mark kw-active">thư tín, điện thoại, điện tín</span>.
+                                    </p>
+                                    <!-- Concrete Example Pill -->
+                                    <div class="mt-2.5 pt-2.5 border-t border-blue-200/60 flex flex-wrap items-center gap-2 text-xs text-slate-600">
+                                        <span class="font-bold text-blue-800"><i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i>Ví dụ thực tiễn (SGK):</span>
+                                        <span>Chị M trả lại thư gửi nhầm cho bưu tá; Bạn X không tự ý đọc tin nhắn trên điện thoại của chị gái.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Note Card 1.2 -->
+                        <div id="noteCard-2" onclick="setSim1Scene(2)" class="note-card group cursor-pointer rounded-2xl p-4 sm:p-5 bg-white hover:bg-rose-50/40 border-2 border-slate-200 hover:border-rose-400 transition-all shadow-sm relative">
+                            <div class="flex items-start gap-3.5">
+                                <button onclick="event.stopPropagation(); toggleNoteDone(2)" id="checkBtn-2" class="mt-1 w-6 h-6 rounded-lg border-2 border-slate-400 bg-white flex items-center justify-center text-transparent hover:border-emerald-600 transition shrink-0" title="Đánh dấu đã ghi bài xong">
+                                    <i class="fa-solid fa-check text-xs"></i>
+                                </button>
+                                <div class="flex-1">
+                                    <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                                        <span class="text-xs font-extrabold uppercase tracking-wider text-rose-700 bg-rose-100 px-2.5 py-0.5 rounded-md">
+                                            Ý ghi bài 1.2 • Hành vi bị cấm
+                                        </span>
+                                        <button onclick="event.stopPropagation(); openIllustrationModal(2)" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-rose-600 text-white hover:bg-rose-700 shadow-sm transition transform hover:scale-105">
+                                            <i class="fa-solid fa-clapperboard"></i>
+                                            <span>Xem hoạt hình minh họa</span>
+                                        </button>
+                                    </div>
+                                    <p id="noteText-2" class="text-slate-900 font-medium text-base sm:text-lg leading-relaxed">
+                                        - Mọi hành vi <span class="kw-mark kw-danger-active">tự ý xâm phạm</span> an toàn và bí mật thư tín, điện thoại, điện tín của công dân đều <span class="kw-mark kw-danger-active">bị nghiêm cấm</span>.
+                                    </p>
+                                    <div class="mt-2.5 pt-2.5 border-t border-slate-100 flex flex-wrap items-center gap-2 text-xs text-slate-600">
+                                        <span class="font-bold text-rose-700"><i class="fa-solid fa-triangle-exclamation mr-1"></i>Lưu ý:</span>
+                                        <span>Không một ai (kể cả cha mẹ, bạn thân, đồng nghiệp) được tự ý bóc thư, đọc trộm tin nhắn hay tiêu hủy bưu phẩm của người khác.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Note Card 1.3 -->
+                        <div id="noteCard-3" onclick="setSim1Scene(3)" class="note-card group cursor-pointer rounded-2xl p-4 sm:p-5 bg-white hover:bg-amber-50/40 border-2 border-slate-200 hover:border-amber-400 transition-all shadow-sm relative">
+                            <div class="flex items-start gap-3.5">
+                                <button onclick="event.stopPropagation(); toggleNoteDone(3)" id="checkBtn-3" class="mt-1 w-6 h-6 rounded-lg border-2 border-slate-400 bg-white flex items-center justify-center text-transparent hover:border-emerald-600 transition shrink-0" title="Đánh dấu đã ghi bài xong">
+                                    <i class="fa-solid fa-check text-xs"></i>
+                                </button>
+                                <div class="flex-1">
+                                    <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                                        <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-md">
+                                            Ý ghi bài 1.3 • Trường hợp ngoại lệ
+                                        </span>
+                                        <button onclick="event.stopPropagation(); openIllustrationModal(3)" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-amber-600 text-white hover:bg-amber-700 shadow-sm transition transform hover:scale-105">
+                                            <i class="fa-solid fa-clapperboard"></i>
+                                            <span>Xem hoạt hình minh họa</span>
+                                        </button>
+                                    </div>
+                                    <p id="noteText-3" class="text-slate-900 font-medium text-base sm:text-lg leading-relaxed">
+                                        - Việc <span class="kw-mark kw-active">kiểm soát</span> thư tín, điện thoại, điện tín của cá nhân chỉ được thực hiện trong trường hợp <span class="kw-mark kw-active">pháp luật có quy định</span> và phải có <span class="kw-mark kw-active">quyết định của cơ quan nhà nước có thẩm quyền</span>, được thực hiện theo <span class="kw-mark kw-active">trình tự, thủ tục</span> mà pháp luật quy định.
+                                    </p>
+                                    <div class="mt-2.5 pt-2.5 border-t border-slate-100 flex flex-wrap items-center gap-2 text-xs text-slate-600">
+                                        <span class="font-bold text-amber-800"><i class="fa-solid fa-key mr-1"></i>3 Điều kiện bắt buộc:</span>
+                                        <span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-semibold">1. Luật quy định</span>
+                                        <span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-semibold">2. Có quyết định thẩm quyền (phục vụ điều tra)</span>
+                                        <span class="bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-semibold">3. Đúng trình tự, thủ tục</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PART 2: HẬU QUẢ VÀ CHẾ TÀI XỬ LÝ -->
+            <div class="bg-white rounded-3xl shadow-lg border border-slate-200/80 overflow-hidden">
+                <!-- Section Header -->
+                <div class="bg-gradient-to-r from-rose-600 to-orange-600 px-6 py-4 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div class="flex items-center gap-3">
+                        <span class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center font-extrabold text-lg">2</span>
+                        <h3 class="text-base sm:text-lg font-extrabold tracking-wide">
+                            Hậu quả của hành vi vi phạm quyền được bảo đảm an toàn và bí mật thư tín, điện thoại, điện tín của công dân
+                        </h3>
+                    </div>
+                    <span class="text-xs bg-white/20 px-3 py-1 rounded-full font-semibold self-start sm:self-center shrink-0">
+                        2 nội dung lớn cần ghi bài
+                    </span>
+                </div>
+
+                <div class="p-5 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    <!-- Left Column: Interactive Consequence & Legal Sanction Simulator (5 cols) -->
+                    <div class="lg:col-span-5 bg-slate-900 rounded-2xl p-5 text-white relative overflow-hidden shadow-inner border border-slate-800">
+                        <div class="flex items-center justify-between border-b border-slate-700/80 pb-3 mb-4">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-rose-400 animate-ping"></span>
+                                <span class="text-xs font-bold uppercase tracking-wider text-rose-300">Mô phỏng Hoạt Hình Mục 2</span>
+                            </div>
+                            <span id="sim2StatusBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-400/30 font-semibold">
+                                Hệ lụy & Chế tài
+                            </span>
+                        </div>
+
+                        <!-- Scene Selector Buttons for Part 2 -->
+                        <div class="grid grid-cols-2 gap-2 mb-4">
+                            <button onclick="setSim2Scene(1)" id="sim2Btn1" class="sim2-btn py-2 px-3 rounded-xl text-xs font-bold bg-rose-600 text-white border border-rose-400 transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-burst"></i>
+                                <span>2.1 Hậu Quả Tiêu Cực</span>
+                            </button>
+                            <button onclick="setSim2Scene(2)" id="sim2Btn2" class="sim2-btn py-2 px-3 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700 transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-gavel text-amber-400"></i>
+                                <span>2.2 Bốn Mức Chế Tài</span>
+                            </button>
+                        </div>
+
+                        <!-- Animated Stage Area for Part 2 -->
+                        <div id="sim2Stage" class="min-h-[300px] flex flex-col justify-between bg-gradient-to-b from-slate-800/90 to-slate-950 rounded-2xl p-4 border border-slate-700/70 relative overflow-hidden">
+                            <!-- Dynamic Content injected by JS -->
+                        </div>
+
+                        <div id="sim2Caption" class="mt-3 text-center text-xs text-slate-300 bg-slate-800/90 rounded-xl p-2.5 border border-slate-700">
+                            Nhấp vào từng thẻ hậu quả hoặc chế tài để xem phân tích tình huống thực tế!
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Note Cards for Part 2 (7 cols) -->
+                    <div class="lg:col-span-7 space-y-4">
+                        <div class="flex items-center justify-between text-xs text-slate-500 px-1">
+                            <span><i class="fa-solid fa-pen-nib text-rose-600 mr-1"></i>Nội dung chuẩn học sinh ghi vào vở:</span>
+                            <button onclick="typewriteSection(2)" class="text-rose-600 hover:text-rose-800 font-bold flex items-center gap-1">
+                                <i class="fa-solid fa-keyboard"></i> Hiệu ứng viết từng chữ Mục 2
+                            </button>
+                        </div>
+
+                        <!-- Note Card 2.1: Negative Consequences -->
+                        <div id="noteCard-4" onclick="setSim2Scene(1)" class="note-card group cursor-pointer rounded-2xl p-4 sm:p-5 bg-rose-50/50 hover:bg-rose-50 border-2 border-rose-400 transition-all shadow-sm relative">
+                            <div class="flex items-start gap-3.5">
+                                <button onclick="event.stopPropagation(); toggleNoteDone(4)" id="checkBtn-4" class="mt-1 w-6 h-6 rounded-lg border-2 border-rose-500 bg-white flex items-center justify-center text-transparent hover:border-emerald-600 transition shrink-0" title="Đánh dấu đã ghi bài xong">
+                                    <i class="fa-solid fa-check text-xs"></i>
+                                </button>
+                                <div class="flex-1">
+                                    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                        <span class="text-xs font-extrabold uppercase tracking-wider text-rose-800 bg-rose-100 px-2.5 py-0.5 rounded-md">
+                                            Ý ghi bài 2.1 • Hậu quả tiêu cực
+                                        </span>
+                                        <button onclick="event.stopPropagation(); openIllustrationModal(4)" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-rose-600 text-white hover:bg-rose-700 shadow-sm transition transform hover:scale-105">
+                                            <i class="fa-solid fa-clapperboard"></i>
+                                            <span>Xem hoạt hình tình huống</span>
+                                        </button>
+                                    </div>
+                                    <div id="noteText-4" class="text-slate-900 font-medium text-base sm:text-lg leading-relaxed space-y-2">
+                                        <p>- Hành vi vi phạm quyền được bảo đảm an toàn và bí mật thư tín, điện thoại, điện tín của công dân gây nên những <span class="kw-mark kw-danger-active">hậu quả tiêu cực</span> như:</p>
+                                        <ul class="pl-4 space-y-1.5 text-sm sm:text-base border-l-2 border-rose-300 ml-1">
+                                            <li>+ Xâm phạm <span class="kw-mark kw-active">đời sống riêng tư</span>, an toàn và <span class="kw-mark kw-active">bí mật cá nhân</span> của công dân;</li>
+                                            <li>+ Gây ảnh hưởng xấu đến <span class="kw-mark kw-danger-active">sức khỏe, tính mạng, tâm lí, danh dự, nhân phẩm, tiền bạc, học tập, công việc</span> của công dân;</li>
+                                            <li>+ Gây ảnh hưởng xấu đến <span class="kw-mark kw-active">tính tôn nghiêm của pháp luật</span> và <span class="kw-mark kw-active">trật tự quản lý hành chính</span>...</li>
+                                        </ul>
+                                    </div>
+                                    <!-- Case study connection from Teacher's Lesson Plan -->
+                                    <div class="mt-3 pt-2.5 border-t border-rose-200/70 grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                                        <div class="bg-white/90 p-2.5 rounded-xl border border-rose-200 leading-relaxed">
+                                            <span class="font-bold text-rose-700 block mb-0.5"><i class="fa-solid fa-user-injured mr-1"></i>Tình huống Nhóm 3 (Bạn T):</span>
+                                            <span class="text-slate-600">Bị chụp tin nhắn riêng tư đăng lên nhóm lớp trêu chọc <i class="fa-solid fa-arrow-right text-rose-500 mx-1"></i> Sốc tâm lý, xấu hổ, phải nghỉ học nhiều ngày.</span>
+                                        </div>
+                                        <div class="bg-white/90 p-2.5 rounded-xl border border-rose-200 leading-relaxed">
+                                            <span class="font-bold text-rose-700 block mb-0.5"><i class="fa-solid fa-briefcase mr-1"></i>Tình huống Nhóm 4 (Nhân viên K):</span>
+                                            <span class="text-slate-600">Bị đồng nghiệp P đọc trộm Zalo khi quên tắt máy tính <i class="fa-solid fa-arrow-right text-rose-500 mx-1"></i> Lộ kế hoạch kinh doanh, mất cơ hội thăng tiến.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Note Card 2.2: Legal Liability -->
+                        <div id="noteCard-5" onclick="setSim2Scene(2)" class="note-card group cursor-pointer rounded-2xl p-4 sm:p-5 bg-white hover:bg-indigo-50/40 border-2 border-slate-200 hover:border-indigo-400 transition-all shadow-sm relative">
+                            <div class="flex items-start gap-3.5">
+                                <button onclick="event.stopPropagation(); toggleNoteDone(5)" id="checkBtn-5" class="mt-1 w-6 h-6 rounded-lg border-2 border-slate-400 bg-white flex items-center justify-center text-transparent hover:border-emerald-600 transition shrink-0" title="Đánh dấu đã ghi bài xong">
+                                    <i class="fa-solid fa-check text-xs"></i>
+                                </button>
+                                <div class="flex-1">
+                                    <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                                        <span class="text-xs font-extrabold uppercase tracking-wider text-indigo-800 bg-indigo-100 px-2.5 py-0.5 rounded-md">
+                                            Ý ghi bài 2.2 • Chế tài xử lý pháp luật
+                                        </span>
+                                        <button onclick="event.stopPropagation(); openIllustrationModal(5)" class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm transition transform hover:scale-105">
+                                            <i class="fa-solid fa-gavel"></i>
+                                            <span>Xem hoạt hình 4 mức xử phạt</span>
+                                        </button>
+                                    </div>
+                                    <p id="noteText-5" class="text-slate-900 font-medium text-base sm:text-lg leading-relaxed">
+                                        - Người thực hiện hành vi vi phạm quyền được bảo đảm an toàn và bí mật thư tín, điện thoại, điện tín của công dân, <span class="kw-mark kw-active">tùy theo tính chất, mức độ vi phạm</span> có thể bị <span class="kw-mark kw-danger-active">xử lý kỷ luật</span>, <span class="kw-mark kw-danger-active">xử lý hành chính</span>, <span class="kw-mark kw-danger-active">xử lý hình sự</span> và phải <span class="kw-mark kw-active">bồi thường thiệt hại (nếu có)</span> theo quy định của pháp luật.
+                                    </p>
+                                    <!-- Quick Summary Badges of 4 Sanctions -->
+                                    <div class="mt-3 pt-2.5 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                                        <div class="bg-slate-50 p-2 rounded-lg border border-slate-200 text-center">
+                                            <span class="font-extrabold text-slate-800 block">1. Kỷ luật</span>
+                                            <span class="text-slate-500 text-[11px]">Theo nội quy trường, cơ quan</span>
+                                        </div>
+                                        <div class="bg-amber-50 p-2 rounded-lg border border-amber-200 text-center">
+                                            <span class="font-extrabold text-amber-800 block">2. Hành chính</span>
+                                            <span class="text-amber-700 text-[11px]">Phạt tiền 20 - 50 triệu đồng</span>
+                                        </div>
+                                        <div class="bg-rose-50 p-2 rounded-lg border border-rose-200 text-center">
+                                            <span class="font-extrabold text-rose-800 block">3. Hình sự</span>
+                                            <span class="text-rose-700 text-[11px]">Cải tạo hoặc phạt tù đến 3 năm</span>
+                                        </div>
+                                        <div class="bg-blue-50 p-2 rounded-lg border border-blue-200 text-center">
+                                            <span class="font-extrabold text-blue-800 block">4. Dân sự</span>
+                                            <span class="text-blue-700 text-[11px]">Bồi thường vật chất & tinh thần</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             MODE 2: VỞ GHI BÀI TRÌNH CHIẾU (NOTEBOOK BOARD VIEW)
+             ========================================== -->
+        <section id="view-notebook" class="hidden space-y-5">
+            <!-- Control Toolbar for Teacher Projection -->
+            <div class="bg-white rounded-2xl p-4 shadow-md border border-slate-200 flex flex-wrap items-center justify-between gap-4">
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="startFullTypewriter()" id="typeAllBtn" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm transition shadow-sm flex items-center gap-2">
+                        <i class="fa-solid fa-feather-pointed"></i>
+                        <span>Hiệu ứng viết bài tự động</span>
+                    </button>
+                    <button onclick="revealNextStep()" class="px-4 py-2.5 rounded-xl bg-indigo-100 hover:bg-indigo-200 text-indigo-800 font-bold text-xs sm:text-sm transition flex items-center gap-2">
+                        <i class="fa-solid fa-forward-step"></i>
+                        <span>Hiện từng mục (Trình chiếu)</span>
+                    </button>
+                    <button onclick="showAllNotebook()" class="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs sm:text-sm transition">
+                        Hiện tất cả
+                    </button>
+                </div>
+
+                <!-- Font Size Zoom for Classroom Projector & Copy Button -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <div class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
+                        <span class="text-xs font-semibold text-slate-600"><i class="fa-solid fa-text-height mr-1"></i>Cỡ chữ máy chiếu:</span>
+                        <button onclick="changeNotebookFont(-2)" class="w-7 h-7 rounded-lg bg-white hover:bg-slate-200 font-bold text-slate-700 shadow-sm">-</button>
+                        <span id="fontSizeLabel" class="text-xs font-bold text-blue-700 w-10 text-center">100%</span>
+                        <button onclick="changeNotebookFont(2)" class="w-7 h-7 rounded-lg bg-white hover:bg-slate-200 font-bold text-slate-700 shadow-sm">+</button>
+                    </div>
+
+                    <button onclick="copyNotebookContent()" class="px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm transition shadow-sm flex items-center gap-2">
+                        <i class="fa-regular fa-copy"></i>
+                        <span id="copyBtnText">Sao chép bài ghi</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Realistic Student Notebook Page -->
+            <div class="notebook-paper rounded-3xl p-6 sm:p-10 md:p-14 border border-slate-300 relative overflow-hidden">
+                <!-- Notebook Top Margin Header -->
+                <div class="pl-6 sm:pl-12 border-b-2 border-blue-800/30 pb-4 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                        <p class="text-xs sm:text-sm font-semibold text-slate-500 uppercase tracking-wider">
+                            Môn: Giáo dục Kinh tế và Pháp luật 11 • Tiết 1
+                        </p>
+                        <h2 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-blue-900 mt-1">
+                            BÀI 19: QUYỀN ĐƯỢC BẢO ĐẢM AN TOÀN VÀ BÍ MẬT VỀ THƯ TÍN, ĐIỆN THOẠI, ĐIỆN TÍN
+                        </h2>
+                    </div>
+                    <div class="bg-amber-50 border border-amber-300 rounded-2xl px-4 py-2 text-xs text-amber-900 font-semibold shrink-0 self-start">
+                        <i class="fa-solid fa-book-bookmark mr-1 text-amber-600"></i> Nội dung trọng tâm ghi vở
+                    </div>
+                </div>
+
+                <!-- Notebook Content Body -->
+                <div id="notebookBody" class="pl-6 sm:pl-12 space-y-6 text-slate-900 transition-all" style="font-size: 19px; line-height: 2.1;">
+                    <!-- Section 1 -->
+                    <div id="nb-step-1" class="nb-step transition-all duration-500">
+                        <h3 class="font-extrabold text-blue-800 text-lg sm:text-xl md:text-2xl underline decoration-blue-400 decoration-2 underline-offset-4 mb-2">
+                            1. Một số quy định cơ bản của pháp luật về quyền được bảo đảm an toàn và bí mật thư tín, điện thoại, điện tín của công dân
+                        </h3>
+                        <ul class="space-y-3 pl-2">
+                            <li id="nb-line-1" class="flex items-start gap-2.5">
+                                <span class="text-blue-600 font-bold">-</span>
+                                <span>Công dân có <span class="kw-mark kw-active">quyền được bảo đảm an toàn và bí mật</span> thư tín, điện thoại, điện tín.</span>
+                            </li>
+                            <li id="nb-line-2" class="flex items-start gap-2.5">
+                                <span class="text-blue-600 font-bold">-</span>
+                                <span>Mọi hành vi <span class="kw-mark kw-danger-active">tự ý xâm phạm</span> an toàn và bí mật thư tín, điện thoại, điện tín của công dân đều <span class="kw-mark kw-danger-active">bị nghiêm cấm</span>.</span>
+                            </li>
+                            <li id="nb-line-3" class="flex items-start gap-2.5">
+                                <span class="text-blue-600 font-bold">-</span>
+                                <span>Việc <span class="kw-mark kw-active">kiểm soát</span> thư tín, điện thoại, điện tín của cá nhân chỉ được thực hiện trong trường hợp <span class="kw-mark kw-active">pháp luật có quy định</span> và phải có <span class="kw-mark kw-active">quyết định của cơ quan nhà nước có thẩm quyền</span>, được thực hiện theo <span class="kw-mark kw-active">trình tự, thủ tục</span> mà pháp luật quy định.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Section 2 -->
+                    <div id="nb-step-2" class="nb-step transition-all duration-500 pt-2">
+                        <h3 class="font-extrabold text-rose-800 text-lg sm:text-xl md:text-2xl underline decoration-rose-400 decoration-2 underline-offset-4 mb-2">
+                            2. Hậu quả của hành vi vi phạm quyền được bảo đảm an toàn và bí mật thư tín, điện thoại, điện tín của công dân
+                        </h3>
+                        <ul class="space-y-3 pl-2">
+                            <li id="nb-line-4" class="space-y-2">
+                                <div class="flex items-start gap-2.5">
+                                    <span class="text-rose-600 font-bold">-</span>
+                                    <span>Hành vi vi phạm quyền được bảo đảm an toàn và bí mật thư tín, điện thoại, điện tín của công dân gây nên những <span class="kw-mark kw-danger-active">hậu quả tiêu cực</span> như:</span>
+                                </div>
+                                <ul class="pl-6 sm:pl-10 space-y-2">
+                                    <li>+ Xâm phạm <span class="kw-mark kw-active">đời sống riêng tư</span>, an toàn và <span class="kw-mark kw-active">bí mật cá nhân</span> của công dân;</li>
+                                    <li>+ Gây ảnh hưởng xấu đến <span class="kw-mark kw-danger-active">sức khỏe, tính mạng, tâm lí, danh dự, nhân phẩm, tiền bạc, học tập, công việc</span> của công dân;</li>
+                                    <li>+ Gây ảnh hưởng xấu đến <span class="kw-mark kw-active">tính tôn nghiêm của pháp luật</span> và <span class="kw-mark kw-active">trật tự quản lý hành chính</span>...</li>
+                                </ul>
+                            </li>
+                            <li id="nb-line-5" class="flex items-start gap-2.5 pt-1">
+                                <span class="text-rose-600 font-bold">-</span>
+                                <span>Người thực hiện hành vi vi phạm quyền được bảo đảm an toàn và bí mật thư tín, điện thoại, điện tín của công dân, <span class="kw-mark kw-active">tùy theo tính chất, mức độ vi phạm</span> có thể bị <span class="kw-mark kw-danger-active">xử lý kỷ luật</span>, <span class="kw-mark kw-danger-active">xử lý hành chính</span>, <span class="kw-mark kw-danger-active">xử lý hình sự</span> và phải <span class="kw-mark kw-active">bồi thường thiệt hại (nếu có)</span> theo quy định của pháp luật.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             MODE 3: INTERACTIVE ANIMATED MINDMAP
+             ========================================== -->
+        <section id="view-mindmap" class="hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-slate-200">
+                <div class="text-center max-w-2xl mx-auto mb-8">
+                    <span class="px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs uppercase tracking-wider">Sơ đồ hóa kiến thức ghi bài</span>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-2">
+                        Sơ Đồ Tư Duy: Quyền Được Bảo Đảm An Toàn Và Bí Mật Thư Tín, Điện Thoại, Điện Tín
+                    </h2>
+                    <p class="text-xs sm:text-sm text-slate-500 mt-1">Nhấp vào từng nhánh để phóng to và ôn lại từ khóa cốt lõi.</p>
+                </div>
+
+                <!-- Central Root Node -->
+                <div class="flex flex-col items-center">
+                    <div class="bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 text-white px-6 py-4 rounded-2xl shadow-xl font-extrabold text-center max-w-md border-4 border-white ring-4 ring-indigo-100 animate-float">
+                        <i class="fa-solid fa-shield-halved text-amber-300 mr-2"></i>
+                        BÀI 19: AN TOÀN & BÍ MẬT THƯ TÍN, ĐIỆN THOẠI, ĐIỆN TÍN
+                    </div>
+
+                    <!-- Connecting Lines -->
+                    <div class="w-1 h-8 bg-indigo-300"></div>
+                    <div class="w-3/4 max-w-3xl h-1 bg-gradient-to-r from-blue-400 via-indigo-400 to-rose-400 rounded-full"></div>
+
+                    <!-- Two Main Branches -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full mt-6">
+                        <!-- Branch 1: Quy định của pháp luật -->
+                        <div class="bg-blue-50/70 rounded-3xl p-5 border-2 border-blue-200 space-y-4">
+                            <div class="bg-blue-600 text-white px-4 py-3 rounded-2xl font-extrabold text-center shadow-md flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-book-atlas"></i>
+                                <span>1. QUY ĐỊNH CỦA PHÁP LUẬT</span>
+                            </div>
+
+                            <div class="space-y-3">
+                                <div onclick="pulseMindmapNode(this)" class="cursor-pointer bg-white p-4 rounded-2xl border border-blue-200 shadow-sm hover:shadow-md transition flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0 font-bold">
+                                        <i class="fa-solid fa-check-double"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 text-sm">Quyền cơ bản của mọi công dân</h4>
+                                        <p class="text-xs text-slate-600 mt-1">Được bảo đảm <strong>an toàn và bí mật</strong> về thư tín, điện thoại, điện tín (thuộc nhóm quyền tự do cá nhân, bảo vệ đời sống riêng tư).</p>
+                                    </div>
+                                </div>
+
+                                <div onclick="pulseMindmapNode(this)" class="cursor-pointer bg-white p-4 rounded-2xl border border-rose-200 shadow-sm hover:shadow-md transition flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 font-bold">
+                                        <i class="fa-solid fa-ban"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 text-sm">Nghiêm cấm mọi hành vi tự ý xâm phạm</h4>
+                                        <p class="text-xs text-slate-600 mt-1">Cấm tự ý bóc mở thư, đọc trộm tin nhắn, nghe lén điện thoại, thu giữ hoặc tiêu hủy trái phép thư tín của người khác.</p>
+                                    </div>
+                                </div>
+
+                                <div onclick="pulseMindmapNode(this)" class="cursor-pointer bg-white p-4 rounded-2xl border border-amber-200 shadow-sm hover:shadow-md transition flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 font-bold">
+                                        <i class="fa-solid fa-user-shield"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 text-sm">Ngoại lệ kiểm soát hợp pháp</h4>
+                                        <p class="text-xs text-slate-600 mt-1">Chỉ khi <strong>pháp luật có quy định</strong> + có <strong>quyết định của cơ quan nhà nước có thẩm quyền</strong> (phục vụ điều tra) + đúng <strong>trình tự, thủ tục</strong>.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Branch 2: Hậu quả & Xử lý vi phạm -->
+                        <div class="bg-rose-50/70 rounded-3xl p-5 border-2 border-rose-200 space-y-4">
+                            <div class="bg-rose-600 text-white px-4 py-3 rounded-2xl font-extrabold text-center shadow-md flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-scale-unbalanced-flip"></i>
+                                <span>2. HẬU QUẢ & CHẾ TÀI XỬ LÝ</span>
+                            </div>
+
+                            <div class="space-y-3">
+                                <div onclick="pulseMindmapNode(this)" class="cursor-pointer bg-white p-4 rounded-2xl border border-rose-200 shadow-sm hover:shadow-md transition flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shrink-0 font-bold">
+                                        <i class="fa-solid fa-heart-crack"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 text-sm">3 Nhóm hậu quả tiêu cực</h4>
+                                        <ul class="text-xs text-slate-600 mt-1 space-y-1 list-disc pl-4">
+                                            <li>Xâm phạm <strong>đời sống riêng tư, bí mật cá nhân</strong>.</li>
+                                            <li>Ảnh hưởng xấu đến <strong>sức khỏe, tính mạng, tâm lí, danh dự, nhân phẩm, tiền bạc, học tập, công việc</strong>.</li>
+                                            <li>Ảnh hưởng xấu đến <strong>tính tôn nghiêm của pháp luật</strong> & trật tự quản lý hành chính.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div onclick="pulseMindmapNode(this)" class="cursor-pointer bg-white p-4 rounded-2xl border border-indigo-200 shadow-sm hover:shadow-md transition flex items-start gap-3">
+                                    <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shrink-0 font-bold">
+                                        <i class="fa-solid fa-gavel"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-900 text-sm">4 Chế tài xử lý người vi phạm</h4>
+                                        <p class="text-xs text-slate-600 mt-1">Tùy theo <strong>tính chất, mức độ vi phạm</strong>: (1) Xử lý <strong>kỷ luật</strong>, (2) Xử lý <strong>hành chính</strong> (20-50 triệu đ), (3) Xử lý <strong>hình sự</strong> (đến 3 năm tù), và (4) <strong>Bồi thường thiệt hại</strong> (nếu có).</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             MODE 4: THỬ THÁCH ĐIỀN KHUYẾT NHỚ NHANH BÀI GHI
+             ========================================== -->
+        <section id="view-practice" class="hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-lg border border-slate-200">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-6">
+                    <div>
+                        <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-bold text-xs uppercase tracking-wider">Hoạt động củng cố sau khi ghi bài</span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1">
+                            Thử Thách Điền Từ Khóa Trọng Tâm Vào Vở Ghi
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-500">Chọn từ khóa đúng trong ngân hàng từ để hoàn thiện nội dung ghi bài Bài 19.</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="bg-emerald-50 border border-emerald-200 px-4 py-2 rounded-2xl text-center">
+                            <span class="text-xs text-emerald-700 block font-semibold">Điểm số</span>
+                            <span id="clozeScore" class="text-lg font-extrabold text-emerald-800">0 / 6</span>
+                        </div>
+                        <button onclick="resetClozeGame()" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs sm:text-sm transition">
+                            <i class="fa-solid fa-rotate-right mr-1"></i> Làm lại
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Word Bank -->
+                <div class="mb-6">
+                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">
+                        <i class="fa-solid fa-layer-group mr-1 text-blue-600"></i>Ngân hàng từ khóa (Nhấp chọn 1 từ khóa rồi nhấp vào ô trống tương ứng):
+                    </p>
+                    <div id="wordBankContainer" class="flex flex-wrap gap-2 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                        <!-- Generated by JS -->
+                    </div>
+                </div>
+
+                <!-- Cloze Passage -->
+                <div class="space-y-4 bg-blue-50/40 p-5 sm:p-6 rounded-2xl border border-blue-200 text-slate-800 text-base sm:text-lg leading-loose">
+                    <p>
+                        <strong>1. Quy định pháp luật:</strong> Công dân có quyền được bảo đảm
+                        <button onclick="fillBlank(0)" id="blank-0" class="cloze-blank inline-flex items-center justify-center min-w-[160px] px-3 py-0.5 mx-1 rounded-lg border-2 border-dashed border-blue-500 bg-white text-blue-700 font-bold text-sm">
+                            [1] Chọn từ...
+                        </button>
+                        thư tín, điện thoại, điện tín. Mọi hành vi tự ý xâm phạm đều
+                        <button onclick="fillBlank(1)" id="blank-1" class="cloze-blank inline-flex items-center justify-center min-w-[150px] px-3 py-0.5 mx-1 rounded-lg border-2 border-dashed border-blue-500 bg-white text-blue-700 font-bold text-sm">
+                            [2] Chọn từ...
+                        </button>.
+                        Việc kiểm soát chỉ được thực hiện khi pháp luật có quy định và phải có quyết định của
+                        <button onclick="fillBlank(2)" id="blank-2" class="cloze-blank inline-flex items-center justify-center min-w-[220px] px-3 py-0.5 mx-1 rounded-lg border-2 border-dashed border-blue-500 bg-white text-blue-700 font-bold text-sm">
+                            [3] Chọn từ...
+                        </button>.
+                    </p>
+                    <p>
+                        <strong>2. Hậu quả & Xử lý:</strong> Hành vi vi phạm xâm phạm trực tiếp đến
+                        <button onclick="fillBlank(3)" id="blank-3" class="cloze-blank inline-flex items-center justify-center min-w-[170px] px-3 py-0.5 mx-1 rounded-lg border-2 border-dashed border-rose-500 bg-white text-rose-700 font-bold text-sm">
+                            [4] Chọn từ...
+                        </button>,
+                        gây ảnh hưởng xấu đến sức khỏe, tâm lí,
+                        <button onclick="fillBlank(4)" id="blank-4" class="cloze-blank inline-flex items-center justify-center min-w-[180px] px-3 py-0.5 mx-1 rounded-lg border-2 border-dashed border-rose-500 bg-white text-rose-700 font-bold text-sm">
+                            [5] Chọn từ...
+                        </button>,
+                        học tập, công việc của công dân. Người vi phạm tùy theo mức độ có thể bị xử lý kỷ luật, hành chính, hình sự và phải
+                        <button onclick="fillBlank(5)" id="blank-5" class="cloze-blank inline-flex items-center justify-center min-w-[190px] px-3 py-0.5 mx-1 rounded-lg border-2 border-dashed border-rose-500 bg-white text-rose-700 font-bold text-sm">
+                            [6] Chọn từ...
+                        </button>
+                        (nếu có).
+                    </p>
+                </div>
+
+                <!-- Feedback Toast inside Practice -->
+                <div id="clozeFeedback" class="hidden mt-4 p-4 rounded-2xl text-sm font-bold flex items-center gap-3"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Animated Storyboard Modal ("Xem Minh Họa" Popup) -->
+    <div id="illustrationModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-3xl max-w-3xl w-full shadow-2xl border border-slate-200 overflow-hidden animate-[scaleIn_0.25s_ease-out]">
+            <!-- Modal Header -->
+            <div id="modalHeader" class="bg-gradient-to-r from-blue-600 to-indigo-700 px-6 py-4 text-white flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center">
+                        <i class="fa-solid fa-clapperboard text-lg"></i>
+                    </div>
+                    <div>
+                        <span id="modalBadge" class="text-[11px] font-bold uppercase tracking-wider bg-white/20 px-2.5 py-0.5 rounded-full">Hoạt hình minh họa</span>
+                        <h3 id="modalTitle" class="text-base sm:text-lg font-extrabold mt-0.5">Minh họa tình huống thực tế</h3>
+                    </div>
+                </div>
+                <button onclick="closeIllustrationModal()" class="w-9 h-9 rounded-xl bg-white/15 hover:bg-white/25 flex items-center justify-center text-white transition" title="Đóng cửa sổ">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body: Animated Comic / Storyboard Stage -->
+            <div class="p-5 sm:p-6 space-y-5">
+                <!-- Animated Stage -->
+                <div id="modalAnimStage" class="bg-slate-900 rounded-2xl p-5 text-white min-h-[250px] flex flex-col justify-between relative overflow-hidden border border-slate-800 shadow-inner">
+                    <!-- Dynamic step animation injected via JS -->
+                </div>
+
+                <!-- Step Progress & Controls -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-50 px-4 py-3 rounded-2xl border border-slate-200">
+                    <div class="flex items-center gap-2" id="modalStepDots">
+                        <!-- Step indicators -->
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="prevModalStep()" id="prevStepBtn" class="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold text-xs transition flex items-center gap-1.5">
+                            <i class="fa-solid fa-backward-step"></i> Cảnh trước
+                        </button>
+                        <button onclick="nextModalStep()" id="nextStepBtn" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition shadow-sm flex items-center gap-1.5">
+                            <span>Cảnh tiếp theo</span> <i class="fa-solid fa-forward-step"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Connection to Student Notebook Lesson -->
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3">
+                    <i class="fa-solid fa-pen-to-square text-amber-600 text-lg mt-0.5"></i>
+                    <div class="text-xs sm:text-sm text-slate-800">
+                        <span class="font-extrabold text-amber-900 block mb-0.5">Kết luận rút ra để ghi vào vở:</span>
+                        <p id="modalLessonTakeaway" class="font-medium leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Toast Notification -->
+    <div id="toastBox" class="fixed bottom-5 right-5 z-50 transform translate-y-24 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl border border-slate-700 flex items-center gap-3">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+        <span id="toastMsg" class="text-xs sm:text-sm font-semibold">Đã cập nhật!</span>
+    </div>
+
+    <script>
+        // ==========================================
+        // STATE & AUDIO SYNTHESIZER
+        // ==========================================
+        let soundEnabled = true;
+        let keywordsHighlighted = true;
+        let completedNotes = new Set();
+        let notebookFontSize = 19;
+        let currentNbStep = 2;
+        let typewriterInterval = null;
+
+        // Timer State (Default 5 minutes = 300s)
+        let timerSeconds = 300;
+        let timerRunning = false;
+        let timerInterval = null;
+
+        // Interactive Simulator States
+        let sim1CurrentScene = 1;
+        let protectedItems = new Set(['letter', 'phone', 'message']);
+        let warrantSteps = new Set([1]);
+        let sim2CurrentScene = 1;
+        let activeSanctionIndex = 1;
+
+        // Web Audio API Sound Effects (No external MP3 required)
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) audioCtx = new AudioCtx();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+                if (type === 'click') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(520, now);
+                    osc.frequency.exponentialRampToValueAtTime(680, now + 0.06);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+                    osc.start(now);
+                    osc.stop(now + 0.06);
+                } else if (type === 'shield') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(330, now);
+                    osc.frequency.exponentialRampToValueAtTime(660, now + 0.18);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+                    osc.start(now);
+                    osc.stop(now + 0.2);
+                } else if (type === 'stamp') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(160, now);
+                    osc.frequency.exponentialRampToValueAtTime(55, now + 0.15);
+                    gain.gain.setValueAtTime(0.16, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+                    osc.start(now);
+                    osc.stop(now + 0.16);
+                } else if (type === 'success') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.08);
+                    osc.frequency.setValueAtTime(783.99, now + 0.16);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
+                    osc.start(now);
+                    osc.stop(now + 0.32);
+                } else if (type === 'type') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(800, now);
+                    gain.gain.setValueAtTime(0.025, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+                    osc.start(now);
+                    osc.stop(now + 0.02);
+                }
+            } catch (e) {
+                // Ignore audio error if blocked
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('soundIcon');
+            icon.className = soundEnabled ? 'fa-solid fa-volume-high text-blue-600' : 'fa-solid fa-volume-xmark text-slate-400';
+            showToast(soundEnabled ? 'Đã bật âm thanh tương tác' : 'Đã tắt âm thanh');
+        }
+
+        function showToast(msg, iconClass = 'fa-solid fa-circle-check text-emerald-400') {
+            const box = document.getElementById('toastBox');
+            document.getElementById('toastMsg').textContent = msg;
+            document.getElementById('toastIcon').className = iconClass + ' text-lg';
+            box.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                box.classList.add('translate-y-24', 'opacity-0');
+            }, 2600);
+        }
+
+        // ==========================================
+        // MODE SWITCHING & KEYWORD HIGHLIGHTING
+        // ==========================================
+        function switchMode(mode) {
+            playSound('click');
+            const modes = ['interactive', 'notebook', 'mindmap', 'practice'];
+            modes.forEach(m => {
+                const section = document.getElementById(`view-${m}`);
+                const tab = document.getElementById(`tab-${m}`);
+                if (m === mode) {
+                    section.classList.remove('hidden');
+                    tab.className = 'mode-tab active-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-blue-600 text-white shadow-sm transition';
+                } else {
+                    section.classList.add('hidden');
+                    tab.className = 'mode-tab flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition';
+                }
+            });
+        }
+
+        function toggleKeywords() {
+            keywordsHighlighted = !keywordsHighlighted;
+            playSound('click');
+            const marks = document.querySelectorAll('.kw-mark');
+            marks.forEach(el => {
+                if (keywordsHighlighted) {
+                    if (el.dataset.type === 'danger') {
+                        el.classList.add('kw-danger-active');
+                    } else {
+                        el.classList.add('kw-active');
+                    }
+                } else {
+                    el.classList.remove('kw-active', 'kw-danger-active');
+                }
+            });
+            const btn = document.getElementById('kwBtn');
+            btn.className = keywordsHighlighted
+                ? 'flex items-center gap-1.5 text-xs sm:text-sm font-semibold px-3 py-2 rounded-xl bg-amber-100 text-amber-900 border border-amber-300 hover:bg-amber-200 transition shadow-sm'
+                : 'flex items-center gap-1.5 text-xs sm:text-sm font-semibold px-3 py-2 rounded-xl bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200 transition';
+            showToast(keywordsHighlighted ? 'Đã bật tô sáng từ khóa trọng tâm' : 'Đã tắt tô sáng từ khóa');
+        }
+
+        // Tag initial danger keywords so toggle works cleanly
+        function initKeywordTags() {
+            document.querySelectorAll('.kw-danger-active').forEach(el => {
+                el.dataset.type = 'danger';
+            });
+        }
+
+        // Classroom Timer Functions
+        function updateTimerUI() {
+            const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+            const secs = String(timerSeconds % 60).padStart(2, '0');
+            document.getElementById('timerDisplay').textContent = `${mins}:${secs}`;
+        }
+
+        function toggleTimer() {
+            playSound('click');
+            const btn = document.getElementById('timerBtn');
+            if (timerRunning) {
+                clearInterval(timerInterval);
+                timerRunning = false;
+                btn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            } else {
+                timerRunning = true;
+                btn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                timerInterval = setInterval(() => {
+                    if (timerSeconds > 0) {
+                        timerSeconds--;
+                        updateTimerUI();
+                    } else {
+                        clearInterval(timerInterval);
+                        timerRunning = false;
+                        btn.innerHTML = '<i class="fa-solid fa-play"></i>';
+                        playSound('success');
+                        showToast('Đã hết thời gian ghi bài!', 'fa-solid fa-bell text-amber-400');
+                    }
+                }, 1000);
+            }
+        }
+
+        function resetTimer() {
+            playSound('click');
+            clearInterval(timerInterval);
+            timerRunning = false;
+            timerSeconds = 300;
+            updateTimerUI();
+            document.getElementById('timerBtn').innerHTML = '<i class="fa-solid fa-play"></i>';
+        }
+
+        // ==========================================
+        // PROGRESS CHECKLIST FOR 5 NOTE ITEMS
+        // ==========================================
+        function toggleNoteDone(id) {
+            const btn = document.getElementById(`checkBtn-${id}`);
+            if (completedNotes.has(id)) {
+                completedNotes.delete(id);
+                btn.className = 'mt-1 w-6 h-6 rounded-lg border-2 border-slate-400 bg-white flex items-center justify-center text-transparent hover:border-emerald-600 transition shrink-0';
+                playSound('click');
+            } else {
+                completedNotes.add(id);
+                btn.className = 'mt-1 w-6 h-6 rounded-lg border-2 border-emerald-600 bg-emerald-600 flex items-center justify-center text-white transition shrink-0 shadow-sm';
+                playSound('success');
+            }
+            const count = completedNotes.size;
+            const pct = Math.round((count / 5) * 100);
+            document.getElementById('noteProgressBar').style.width = `${pct}%`;
+            document.getElementById('noteProgressText').textContent = `${count}/5 ý`;
+            if (count === 5) {
+                showToast('Tuyệt vời! Bạn đã hoàn thành ghi chép toàn bộ 5 ý trọng tâm Bài 19!', 'fa-solid fa-trophy text-amber-400');
+            }
+        }
+
+        function expandAllNotes() {
+            for (let i = 1; i <= 5; i++) {
+                if (!completedNotes.has(i)) toggleNoteDone(i);
+            }
+        }
+
+        // ==========================================
+        // SIMULATOR 1: QUY ĐỊNH CỦA PHÁP LUẬT (3 SCENES)
+        // ==========================================
+        function setSim1Scene(sceneNum) {
+            sim1CurrentScene = sceneNum;
+            playSound('click');
+
+            // Update Scene Buttons
+            for (let i = 1; i <= 3; i++) {
+                const btn = document.getElementById(`sim1Btn${i}`);
+                const card = document.getElementById(`noteCard-${i}`);
+                if (i === sceneNum) {
+                    btn.className = 'sim1-btn py-2 px-2 rounded-xl text-xs font-bold bg-blue-600 text-white border border-blue-400 transition flex flex-col items-center gap-1 shadow-md';
+                    card.classList.add('ring-2', 'ring-blue-500', 'bg-blue-50/70');
+                } else {
+                    btn.className = 'sim1-btn py-2 px-2 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700 transition flex flex-col items-center gap-1';
+                    card.classList.remove('ring-2', 'ring-blue-500', 'bg-blue-50/70');
+                }
+            }
+
+            renderSim1Stage();
+        }
+
+        function renderSim1Stage() {
+            const stage = document.getElementById('sim1Stage');
+            const badge = document.getElementById('sim1StatusBadge');
+            const caption = document.getElementById('sim1Caption');
+
+            if (sim1CurrentScene === 1) {
+                const allProtected = protectedItems.size === 3;
+                badge.textContent = allProtected ? 'Đã kích hoạt Khiên Pháp Luật 100%' : `Đang bảo vệ ${protectedItems.size}/3 phương tiện`;
+                badge.className = 'text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-semibold';
+                caption.innerHTML = 'Nhấp vào <strong>Thư tín</strong>, <strong>Điện thoại</strong>, <strong>Điện tín</strong> để bật/tắt lớp khiên bảo mật pháp luật!';
+
+                stage.innerHTML = `
+                    <div class="relative flex flex-col items-center w-full">
+                        <!-- Animated Shield Header -->
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg animate-shield mb-3 border border-blue-300/40">
+                            <i class="fa-solid fa-shield-halved text-3xl text-white"></i>
+                        </div>
+                        <p class="text-xs font-bold text-blue-200 uppercase tracking-wider mb-4">Hiến Pháp 2013 (Điều 21) Bảo Hộ</p>
+
+                        <!-- 3 Interactive Communication Channels -->
+                        <div class="grid grid-cols-3 gap-3 w-full">
+                            ${renderChannelItem('letter', 'Thư tín', 'fa-envelope-open-text', 'Bưu phẩm, thư tay')}
+                            ${renderChannelItem('phone', 'Điện thoại', 'fa-mobile-screen-button', 'Cuộc gọi, danh bạ')}
+                            ${renderChannelItem('message', 'Điện tín', 'fa-comments', 'Zalo, SMS, Email')}
+                        </div>
+                    </div>
+                `;
+            } else if (sim1CurrentScene === 2) {
+                badge.textContent = 'Chế độ Nghiêm Cấm Xâm Phạm';
+                badge.className = 'text-xs px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-400/30 font-semibold';
+                caption.innerHTML = 'Nhấp vào nút <strong>"Đóng Dấu Nghiêm Cấm"</strong> để chặn các hành vi xâm phạm trái phép!';
+
+                stage.innerHTML = `
+                    <div class="w-full flex flex-col items-center justify-between space-y-3">
+                        <div class="grid grid-cols-2 gap-2.5 w-full text-left">
+                            <div class="bg-slate-800/90 border border-rose-500/40 rounded-xl p-2.5 flex items-center gap-2.5">
+                                <i class="fa-solid fa-envelope-open text-rose-400 text-lg"></i>
+                                <div>
+                                    <div class="text-xs font-bold text-white">Tự ý bóc mở thư</div>
+                                    <div class="text-[11px] text-slate-400">Xem trộm hoặc tiêu hủy thư</div>
+                                </div>
+                            </div>
+                            <div class="bg-slate-800/90 border border-rose-500/40 rounded-xl p-2.5 flex items-center gap-2.5">
+                                <i class="fa-solid fa-eye text-rose-400 text-lg"></i>
+                                <div>
+                                    <div class="text-xs font-bold text-white">Đọc trộm tin nhắn</div>
+                                    <div class="text-[11px] text-slate-400">Chụp màn hình phát tán</div>
+                                </div>
+                            </div>
+                            <div class="bg-slate-800/90 border border-rose-500/40 rounded-xl p-2.5 flex items-center gap-2.5">
+                                <i class="fa-solid fa-headphones text-rose-400 text-lg"></i>
+                                <div>
+                                    <div class="text-xs font-bold text-white">Nghe lén điện thoại</div>
+                                    <div class="text-[11px] text-slate-400">Ghi âm cuộc gọi trái phép</div>
+                                </div>
+                            </div>
+                            <div class="bg-slate-800/90 border border-rose-500/40 rounded-xl p-2.5 flex items-center gap-2.5">
+                                <i class="fa-solid fa-laptop-code text-rose-400 text-lg"></i>
+                                <div>
+                                    <div class="text-xs font-bold text-white">Chiếm đoạt Zalo/Email</div>
+                                    <div class="text-[11px] text-slate-400">Khi người khác quên thoát</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Animated Stamp Overlay -->
+                        <div id="prohibitedStamp" class="stamp-active my-1 px-5 py-1.5 rounded-xl border-4 border-rose-500 bg-rose-950/90 text-rose-300 font-black text-sm tracking-widest uppercase shadow-lg">
+                            <i class="fa-solid fa-ban mr-1.5"></i> PHÁP LUẬT NGHIÊM CẤM
+                        </div>
+
+                        <button onclick="triggerStampEffect()" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition shadow-md flex items-center gap-1.5">
+                            <i class="fa-solid fa-stamp"></i> Đóng Dấu Nghiêm Cấm Lại
+                        </button>
+                    </div>
+                `;
+            } else if (sim1CurrentScene === 3) {
+                const unlocked = warrantSteps.size === 3;
+                badge.textContent = unlocked ? 'Đủ 3 Điều Kiện Kiểm Soát Hợp Pháp' : `Đã xác thực ${warrantSteps.size}/3 điều kiện`;
+                badge.className = 'text-xs px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30 font-semibold';
+                caption.innerHTML = 'Nhấp mở đủ <strong>3 Chốt Khóa Pháp Lý</strong> để xem khi nào cơ quan chức năng được phép kiểm soát!';
+
+                stage.innerHTML = `
+                    <div class="w-full space-y-2.5">
+                        <div onclick="toggleWarrantStep(1)" class="cursor-pointer p-2.5 rounded-xl border transition flex items-center justify-between ${warrantSteps.has(1) ? 'bg-amber-500/20 border-amber-400 text-white' : 'bg-slate-800 border-slate-700 text-slate-400'}">
+                            <div class="flex items-center gap-2.5">
+                                <i class="fa-solid ${warrantSteps.has(1) ? 'fa-lock-open text-amber-400' : 'fa-lock text-slate-500'}"></i>
+                                <span class="text-xs font-bold">1. Trường hợp pháp luật có quy định</span>
+                            </div>
+                            <span class="text-[11px] px-2 py-0.5 rounded bg-slate-900/70">${warrantSteps.has(1) ? 'Đã mở' : 'Nhấp mở'}</span>
+                        </div>
+
+                        <div onclick="toggleWarrantStep(2)" class="cursor-pointer p-2.5 rounded-xl border transition flex items-center justify-between ${warrantSteps.has(2) ? 'bg-amber-500/20 border-amber-400 text-white' : 'bg-slate-800 border-slate-700 text-slate-400'}">
+                            <div class="flex items-center gap-2.5">
+                                <i class="fa-solid ${warrantSteps.has(2) ? 'fa-lock-open text-amber-400' : 'fa-lock text-slate-500'}"></i>
+                                <span class="text-xs font-bold">2. Quyết định của cơ quan nhà nước có thẩm quyền</span>
+                            </div>
+                            <span class="text-[11px] px-2 py-0.5 rounded bg-slate-900/70">${warrantSteps.has(2) ? 'Đã mở' : 'Nhấp mở'}</span>
+                        </div>
+
+                        <div onclick="toggleWarrantStep(3)" class="cursor-pointer p-2.5 rounded-xl border transition flex items-center justify-between ${warrantSteps.has(3) ? 'bg-amber-500/20 border-amber-400 text-white' : 'bg-slate-800 border-slate-700 text-slate-400'}">
+                            <div class="flex items-center gap-2.5">
+                                <i class="fa-solid ${warrantSteps.has(3) ? 'fa-lock-open text-amber-400' : 'fa-lock text-slate-500'}"></i>
+                                <span class="text-xs font-bold">3. Thực hiện đúng trình tự, thủ tục luật định</span>
+                            </div>
+                            <span class="text-[11px] px-2 py-0.5 rounded bg-slate-900/70">${warrantSteps.has(3) ? 'Đã mở' : 'Nhấp mở'}</span>
+                        </div>
+
+                        <div class="mt-2 p-2.5 rounded-xl text-center text-xs font-bold ${unlocked ? 'bg-emerald-500/20 border border-emerald-400 text-emerald-300' : 'bg-slate-800/70 text-slate-400'}">
+                            ${unlocked
+                                ? '<i class="fa-solid fa-circle-check mr-1"></i> HỢP PHÁP: Được phép kiểm soát để phục vụ điều tra & bảo vệ an ninh quốc gia!'
+                                : '<i class="fa-solid fa-circle-info mr-1"></i> Thiếu 1 trong 3 điều kiện trên thì việc kiểm soát là BẤT HỢP PHÁP.'}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function renderChannelItem(key, title, icon, desc) {
+            const active = protectedItems.has(key);
+            return `
+                <div onclick="toggleChannelProtect('${key}')" class="cursor-pointer rounded-xl p-3 border text-center transition-all transform hover:-translate-y-1 ${active ? 'bg-blue-600/30 border-blue-400 shadow-lg shadow-blue-500/10' : 'bg-slate-800/80 border-slate-700 opacity-60'}">
+                    <div class="w-10 h-10 mx-auto rounded-xl flex items-center justify-center mb-1.5 ${active ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-400'}">
+                        <i class="fa-solid ${icon} text-lg"></i>
+                    </div>
+                    <div class="text-xs font-bold text-white">${title}</div>
+                    <div class="text-[10px] text-slate-300 mt-0.5">${desc}</div>
+                    <div class="mt-1.5 inline-block text-[10px] px-2 py-0.5 rounded-full font-bold ${active ? 'bg-emerald-500/30 text-emerald-300' : 'bg-rose-500/30 text-rose-300'}">
+                        ${active ? '<i class="fa-solid fa-lock mr-1"></i>An toàn' : '<i class="fa-solid fa-unlock mr-1"></i>Mở'}
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleChannelProtect(key) {
+            playSound('shield');
+            if (protectedItems.has(key)) {
+                protectedItems.delete(key);
+            } else {
+                protectedItems.add(key);
+            }
+            renderSim1Stage();
+        }
+
+        function triggerStampEffect() {
+            playSound('stamp');
+            const stamp = document.getElementById('prohibitedStamp');
+            if (stamp) {
+                stamp.classList.remove('stamp-active');
+                void stamp.offsetWidth;
+                stamp.classList.add('stamp-active');
+            }
+        }
+
+        function toggleWarrantStep(step) {
+            playSound('shield');
+            if (warrantSteps.has(step)) {
+                warrantSteps.delete(step);
+            } else {
+                warrantSteps.add(step);
+            }
+            renderSim1Stage();
+        }
+
+        // ==========================================
+        // SIMULATOR 2: HẬU QUẢ & 4 CHẾ TÀI XỬ LÝ
+        // ==========================================
+        function setSim2Scene(sceneNum) {
+            sim2CurrentScene = sceneNum;
+            playSound('click');
+
+            const btn1 = document.getElementById('sim2Btn1');
+            const btn2 = document.getElementById('sim2Btn2');
+            const card4 = document.getElementById('noteCard-4');
+            const card5 = document.getElementById('noteCard-5');
+
+            if (sceneNum === 1) {
+                btn1.className = 'sim2-btn py-2 px-3 rounded-xl text-xs font-bold bg-rose-600 text-white border border-rose-400 transition flex items-center justify-center gap-2 shadow-md';
+                btn2.className = 'sim2-btn py-2 px-3 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700 transition flex items-center justify-center gap-2';
+                card4.classList.add('ring-2', 'ring-rose-500');
+                card5.classList.remove('ring-2', 'ring-indigo-500');
+            } else {
+                btn2.className = 'sim2-btn py-2 px-3 rounded-xl text-xs font-bold bg-indigo-600 text-white border border-indigo-400 transition flex items-center justify-center gap-2 shadow-md';
+                btn1.className = 'sim2-btn py-2 px-3 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700 transition flex items-center justify-center gap-2';
+                card5.classList.add('ring-2', 'ring-indigo-500');
+                card4.classList.remove('ring-2', 'ring-rose-500');
+            }
+
+            renderSim2Stage();
+        }
+
+        function renderSim2Stage() {
+            const stage = document.getElementById('sim2Stage');
+            const badge = document.getElementById('sim2StatusBadge');
+
+            if (sim2CurrentScene === 1) {
+                badge.textContent = '3 Vòng Xoáy Hậu Quả Tiêu Cực';
+                badge.className = 'text-xs px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-400/30 font-semibold';
+
+                stage.innerHTML = `
+                    <div class="space-y-2.5 my-auto">
+                        <div class="p-3 rounded-xl bg-rose-950/60 border border-rose-500/40 flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-rose-600 flex items-center justify-center shrink-0 mt-0.5">
+                                <i class="fa-solid fa-user-slash text-white"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-extrabold text-rose-200">1. Xâm phạm đời sống riêng tư & bí mật cá nhân</div>
+                                <p class="text-[11px] text-slate-300 mt-0.5">Mất cảm giác an toàn, thông tin nhạy cảm bị phơi bày trái ý muốn.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-orange-950/60 border border-orange-500/40 flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-orange-600 flex items-center justify-center shrink-0 mt-0.5">
+                                <i class="fa-solid fa-heart-crack text-white"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-extrabold text-orange-200">2. Tổn hại sức khỏe, tâm lí, danh dự, tiền bạc, học tập, công việc</div>
+                                <p class="text-[11px] text-slate-300 mt-0.5">Ví dụ: Bạn T xấu hổ nghỉ học; Anh K mất cơ hội thăng tiến vì lộ tin nhắn Zalo.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-3 rounded-xl bg-amber-950/60 border border-amber-500/40 flex items-start gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-amber-600 flex items-center justify-center shrink-0 mt-0.5">
+                                <i class="fa-solid fa-scale-unbalanced text-white"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-extrabold text-amber-200">3. Ảnh hưởng tính tôn nghiêm pháp luật & trật tự hành chính</div>
+                                <p class="text-[11px] text-slate-300 mt-0.5">Gây mất đoàn kết tập thể, tạo môi trường bắt nạt mạng độc hại.</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                badge.textContent = '4 Mức Chế Tài Pháp Luật';
+                badge.className = 'text-xs px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 font-semibold';
+
+                const sanctions = [
+                    {
+                        id: 1,
+                        name: '1. Kỷ luật',
+                        icon: 'fa-building-user',
+                        color: 'from-slate-600 to-slate-700',
+                        detail: 'Áp dụng theo nội quy của nhà trường, cơ quan, tổ chức, công ty (khiển trách, cảnh cáo, hạ bậc hạnh kiểm hoặc buộc thôi việc).'
+                    },
+                    {
+                        id: 2,
+                        name: '2. Hành chính',
+                        icon: 'fa-file-invoice-dollar',
+                        color: 'from-amber-600 to-orange-600',
+                        detail: 'Phạt tiền từ 20.000.000 đồng đến 50.000.000 đồng đối với hành vi bóc mở, tiêu hủy, tiết lộ trái phép thư tín, điện thoại, điện tín.'
+                    },
+                    {
+                        id: 3,
+                        name: '3. Hình sự',
+                        icon: 'fa-handcuffs',
+                        color: 'from-rose-600 to-red-700',
+                        detail: 'Điều 159 Bộ luật Hình sự: Có thể bị phạt cảnh cáo, phạt tiền, cải tạo không giam giữ hoặc phạt tù lên đến 3 năm!'
+                    },
+                    {
+                        id: 4,
+                        name: '4. Dân sự',
+                        icon: 'fa-hand-holding-dollar',
+                        color: 'from-blue-600 to-indigo-700',
+                        detail: 'Bắt buộc phải bồi thường thiệt hại (nếu có) về cả vật chất lẫn tổn thất tinh thần đã gây ra cho nạn nhân.'
+                    }
+                ];
+
+                const current = sanctions.find(s => s.id === activeSanctionIndex);
+
+                stage.innerHTML = `
+                    <div class="space-y-3 my-auto">
+                        <div class="grid grid-cols-2 gap-2">
+                            ${sanctions.map(s => `
+                                <button onclick="selectSanction(${s.id})" class="p-2.5 rounded-xl border text-left transition flex items-center gap-2 ${s.id === activeSanctionIndex ? 'bg-indigo-600 border-indigo-300 text-white shadow-md' : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'}">
+                                    <i class="fa-solid ${s.icon}"></i>
+                                    <span class="text-xs font-bold">${s.name}</span>
+                                </button>
+                            `).join('')}
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-gradient-to-br ${current.color} text-white shadow-lg border border-white/20">
+                            <div class="flex items-center gap-2 font-extrabold text-sm mb-1">
+                                <i class="fa-solid ${current.icon}"></i>
+                                <span>Chi tiết chế tài: ${current.name}</span>
+                            </div>
+                            <p class="text-xs leading-relaxed text-white/95">${current.detail}</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function selectSanction(id) {
+            playSound('stamp');
+            activeSanctionIndex = id;
+            renderSim2Stage();
+        }
+
+        // ==========================================
+        // TYPEWRITER & NOTEBOOK PRESENTATION CONTROLS
+        // ==========================================
+        const rawNoteTexts = {
+            1: '- Công dân có quyền được bảo đảm an toàn và bí mật thư tín, điện thoại, điện tín.',
+            2: '- Mọi hành vi tự ý xâm phạm an toàn và bí mật thư tín, điện thoại, điện tín của công dân đều bị nghiêm cấm.',
+            3: '- Việc kiểm soát thư tín, điện thoại, điện tín của cá nhân chỉ được thực hiện trong trường hợp pháp luật có quy định và phải có quyết định của cơ quan nhà nước có thẩm quyền, được thực hiện theo trình tự, thủ tục mà pháp luật quy định.'
+        };
+
+        function typewriteSection(secNum) {
+            if (typewriterInterval) clearInterval(typewriterInterval);
+            playSound('click');
+
+            if (secNum === 1) {
+                const el = document.getElementById('noteText-1');
+                const fullText = rawNoteTexts[1];
+                el.textContent = '';
+                let i = 0;
+                typewriterInterval = setInterval(() => {
+                    if (i < fullText.length) {
+                        el.textContent += fullText.charAt(i);
+                        if (i % 4 === 0) playSound('type');
+                        i++;
+                    } else {
+                        clearInterval(typewriterInterval);
+                        el.innerHTML = '- Công dân có <span class="kw-mark kw-active">quyền được bảo đảm an toàn và bí mật</span> <span class="kw-mark kw-active">thư tín, điện thoại, điện tín</span>.';
+                        showToast('Đã hoàn thành hiệu ứng viết mẫu!');
+                    }
+                }, 25);
+            } else {
+                const el = document.getElementById('noteText-5');
+                const fullText = '- Người thực hiện hành vi vi phạm quyền được bảo đảm an toàn và bí mật thư tín, điện thoại, điện tín của công dân, tùy theo tính chất, mức độ vi phạm có thể bị xử lý kỷ luật, xử lý hành chính, xử lý hình sự và phải bồi thường thiệt hại (nếu có) theo quy định của pháp luật.';
+                el.textContent = '';
+                let i = 0;
+                typewriterInterval = setInterval(() => {
+                    if (i < fullText.length) {
+                        el.textContent += fullText.charAt(i);
+                        if (i % 5 === 0) playSound('type');
+                        i++;
+                    } else {
+                        clearInterval(typewriterInterval);
+                        el.innerHTML = '- Người thực hiện hành vi vi phạm quyền được bảo đảm an toàn và bí mật thư tín, điện thoại, điện tín của công dân, <span class="kw-mark kw-active">tùy theo tính chất, mức độ vi phạm</span> có thể bị <span class="kw-mark kw-danger-active" data-type="danger">xử lý kỷ luật</span>, <span class="kw-mark kw-danger-active" data-type="danger">xử lý hành chính</span>, <span class="kw-mark kw-danger-active" data-type="danger">xử lý hình sự</span> và phải <span class="kw-mark kw-active">bồi thường thiệt hại (nếu có)</span> theo quy định của pháp luật.';
+                        showToast('Đã hoàn thành hiệu ứng viết mẫu Mục 2!');
+                    }
+                }, 20);
+            }
+        }
+
+        function changeNotebookFont(delta) {
+            playSound('click');
+            notebookFontSize = Math.min(30, Math.max(15, notebookFontSize + delta));
+            const body = document.getElementById('notebookBody');
+            body.style.fontSize = `${notebookFontSize}px`;
+            const pct = Math.round((notebookFontSize / 19) * 100);
+            document.getElementById('fontSizeLabel').textContent = `${pct}%`;
+        }
+
+        function revealNextStep() {
+            playSound('shield');
+            const s1 = document.getElementById('nb-step-1');
+            const s2 = document.getElementById('nb-step-2');
+            if (currentNbStep === 2) {
+                currentNbStep = 1;
+                s1.classList.remove('opacity-20', 'blur-sm');
+                s2.classList.add('opacity-20', 'blur-sm');
+                showToast('Đang trình chiếu Mục 1 để học sinh ghi bài');
+            } else {
+                currentNbStep = 2;
+                s2.classList.remove('opacity-20', 'blur-sm');
+                showToast('Đã hiển thị tiếp Mục 2');
+            }
+        }
+
+        function showAllNotebook() {
+            playSound('click');
+            document.getElementById('nb-step-1').classList.remove('opacity-20', 'blur-sm');
+            document.getElementById('nb-step-2').classList.remove('opacity-20', 'blur-sm');
+            currentNbStep = 2;
+        }
+
+        function startFullTypewriter() {
+            playSound('shield');
+            const lines = ['nb-line-1', 'nb-line-2', 'nb-line-3', 'nb-line-4', 'nb-line-5'];
+            lines.forEach((id, idx) => {
+                const el = document.getElementById(id);
+                el.style.opacity = '0';
+                el.style.transform = 'translateX(-12px)';
+                el.style.transition = 'all 0.45s ease';
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateX(0)';
+                    playSound('type');
+                }, idx * 450);
+            });
+            showToast('Đang trình chiếu tuần tự từng ý ghi bài...');
+        }
+
+        function copyNotebookContent() {
+            const plainText = `BÀI 19: QUYỀN ĐƯỢC BẢO ĐẢM AN TOÀN VÀ BÍ MẬT VỀ THƯ TÍN, ĐIỆN THOẠI, ĐIỆN TÍN\n\n1. Một số quy định cơ bản của pháp luật về quyền được bảo đảm an toàn và bí mật thư tín, điện thoại, điện tín của công dân\n- Công dân có quyền được bảo đảm an toàn và bí mật thư tín, điện thoại, điện tín.\n- Mọi hành vi tự ý xâm phạm an toàn và bí mật thư tín, điện thoại, điện tín của công dân đều bị nghiêm cấm.\n- Việc kiểm soát thư tín, điện thoại, điện tín của cá nhân chỉ được thực hiện trong trường hợp pháp luật có quy định và phải có quyết định của cơ quan nhà nước có thẩm quyền, được thực hiện theo trình tự, thủ tục mà pháp luật quy định.\n\n2. Hậu quả của hành vi vi phạm quyền được bảo đảm an toàn và bí mật thư tín, điện thoại, điện tín của công dân\n- Hành vi vi phạm quyền được bảo đảm an toàn và bí mật thư tín, điện thoại, điện tín của công dân gây nên những hậu quả tiêu cực như:\n  + Xâm phạm đời sống riêng tư, an toàn và bí mật cá nhân của công dân;\n  + Gây ảnh hưởng xấu đến sức khỏe, tính mạng, tâm lí, danh dự, nhân phẩm, tiền bạc, học tập, công việc của công dân;\n  + Gây ảnh hưởng xấu đến tính tôn nghiêm của pháp luật và trật tự quản lý hành chính...\n- Người thực hiện hành vi vi phạm quyền được bảo đảm an toàn và bí mật thư tín, điện thoại, điện tín của công dân, tùy theo tính chất, mức độ vi phạm có thể bị xử lý kỷ luật, xử lý hành chính, xử lý hình sự và phải bồi thường thiệt hại (nếu có) theo quy định của pháp luật.`;
+
+            const textarea = document.createElement('textarea');
+            textarea.value = plainText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            playSound('success');
+            document.getElementById('copyBtnText').textContent = 'Đã sao chép!';
+            showToast('Đã sao chép toàn bộ nội dung ghi bài vào bộ nhớ tạm!');
+            setTimeout(() => {
+                document.getElementById('copyBtnText').textContent = 'Sao chép bài ghi';
+            }, 2500);
+        }
+
+        function pulseMindmapNode(el) {
+            playSound('click');
+            el.classList.add('ring-4', 'ring-blue-400', 'scale-[1.02]');
+            setTimeout(() => {
+                el.classList.remove('ring-4', 'ring-blue-400', 'scale-[1.02]');
+            }, 600);
+        }
+
+        // ==========================================
+        // MODE 4: CLOZE TEST (ĐIỀN KHUYẾT TỪ KHÓA)
+        // ==========================================
+        const clozeAnswers = [
+            'an toàn và bí mật',
+            'bị nghiêm cấm',
+            'cơ quan nhà nước có thẩm quyền',
+            'đời sống riêng tư',
+            'danh dự, nhân phẩm',
+            'bồi thường thiệt hại'
+        ];
+
+        let selectedWordIndex = null;
+        let filledBlanks = {};
+
+        function initClozeGame() {
+            const bank = document.getElementById('wordBankContainer');
+            const shuffled = clozeAnswers
+                .map((word, index) => ({ word, index }))
+                .sort(() => Math.random() - 0.5);
+
+            bank.innerHTML = shuffled.map(item => `
+                <button onclick="selectWordBank(${item.index})" id="wb-${item.index}" class="px-3.5 py-2 rounded-xl bg-white hover:bg-blue-50 text-slate-800 border-2 border-slate-300 font-bold text-xs sm:text-sm transition shadow-sm">
+                    ${item.word}
+                </button>
+            `).join('');
+        }
+
+        function selectWordBank(idx) {
+            playSound('click');
+            selectedWordIndex = idx;
+            clozeAnswers.forEach((_, i) => {
+                const btn = document.getElementById(`wb-${i}`);
+                if (btn && !btn.disabled) {
+                    btn.className = i === idx
+                        ? 'px-3.5 py-2 rounded-xl bg-blue-600 text-white border-2 border-blue-600 font-bold text-xs sm:text-sm transition shadow-md scale-105'
+                        : 'px-3.5 py-2 rounded-xl bg-white hover:bg-blue-50 text-slate-800 border-2 border-slate-300 font-bold text-xs sm:text-sm transition shadow-sm';
+                }
+            });
+        }
+
+        function fillBlank(blankIdx) {
+            if (selectedWordIndex === null) {
+                showToast('Hãy nhấp chọn 1 từ khóa trong Ngân hàng từ trước!', 'fa-solid fa-hand-pointer text-amber-400');
+                return;
+            }
+
+            const blankBtn = document.getElementById(`blank-${blankIdx}`);
+            const feedback = document.getElementById('clozeFeedback');
+
+            if (selectedWordIndex === blankIdx) {
+                // Correct match
+                playSound('success');
+                filledBlanks[blankIdx] = true;
+                blankBtn.textContent = clozeAnswers[blankIdx];
+                blankBtn.className = 'inline-flex items-center justify-center px-3 py-0.5 mx-1 rounded-lg border-2 border-emerald-500 bg-emerald-100 text-emerald-900 font-extrabold text-sm';
+
+                const wordBtn = document.getElementById(`wb-${selectedWordIndex}`);
+                if (wordBtn) {
+                    wordBtn.disabled = true;
+                    wordBtn.className = 'px-3.5 py-2 rounded-xl bg-slate-200 text-slate-400 border-2 border-slate-200 font-bold text-xs sm:text-sm line-through opacity-50 cursor-not-allowed';
+                }
+
+                selectedWordIndex = null;
+                const score = Object.keys(filledBlanks).length;
+                document.getElementById('clozeScore').textContent = `${score} / 6`;
+
+                feedback.className = 'mt-4 p-4 rounded-2xl text-sm font-bold flex items-center gap-3 bg-emerald-100 text-emerald-900 border border-emerald-300';
+                feedback.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 text-lg"></i> Chính xác! Từ khóa "${clozeAnswers[blankIdx]}" đã được điền đúng vào nội dung ghi bài.`;
+
+                if (score === 6) {
+                    showToast('Xuất sắc! Bạn đã thuộc toàn bộ từ khóa trọng tâm của Bài 19!', 'fa-solid fa-medal text-amber-400');
+                }
+            } else {
+                // Incorrect match
+                playSound('stamp');
+                feedback.className = 'mt-4 p-4 rounded-2xl text-sm font-bold flex items-center gap-3 bg-rose-100 text-rose-900 border border-rose-300';
+                feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-600 text-lg"></i> Chưa chính xác! Hãy đọc kỹ ngữ cảnh câu ghi bài và thử lại nhé.`;
+            }
+        }
+
+        function resetClozeGame() {
+            playSound('click');
+            selectedWordIndex = null;
+            filledBlanks = {};
+            document.getElementById('clozeScore').textContent = '0 / 6';
+            document.getElementById('clozeFeedback').className = 'hidden';
+
+            for (let i = 0; i < 6; i++) {
+                const b = document.getElementById(`blank-${i}`);
+                b.textContent = `[${i + 1}] Chọn từ...`;
+                b.className = `cloze-blank inline-flex items-center justify-center min-w-[160px] px-3 py-0.5 mx-1 rounded-lg border-2 border-dashed ${i < 3 ? 'border-blue-500 text-blue-700' : 'border-rose-500 text-rose-700'} bg-white font-bold text-sm`;
+            }
+            initClozeGame();
+        }
+
+        // ==========================================
+        // ANIMATED STORYBOARD MODAL ("XEM MINH HỌA")
+        // ==========================================
+        const illustrationStories = {
+            1: {
+                badge: 'Minh họa Ý 1.1 • SGK Trang 124 (Nhóm 1 & 2)',
+                title: 'Tôn trọng bí mật thư tín, điện thoại của người khác',
+                headerColor: 'from-blue-600 to-indigo-700',
+                takeaway: 'Công dân có quyền được bảo đảm an toàn và bí mật thư tín, điện thoại, điện tín.',
+                steps: [
+                    {
+                        sceneTitle: 'Cảnh 1: Bức thư gửi nhầm địa chỉ (Trường hợp 4 - SGK)',
+                        leftActor: { icon: 'fa-user-tie', name: 'Nhân viên bưu tá', color: 'bg-amber-500', speech: 'Gửi chị M thư chuyển phát nhanh ạ!' },
+                        centerAction: { icon: 'fa-envelope', label: 'Thư ghi tên người nhận khác', badge: 'Gửi nhầm' },
+                        rightActor: { icon: 'fa-users', name: 'Đồng nghiệp tò mò', color: 'bg-rose-500', speech: 'Hay chị cứ bóc đại ra xem bên trong viết gì đi!' },
+                        narration: 'Nhân viên bưu chính giao nhầm bức thư của người khác cho chị M. Các đồng nghiệp xung quanh tò mò xúi chị M bóc ra xem.'
+                    },
+                    {
+                        sceneTitle: 'Cảnh 2: Cách hành xử đúng pháp luật của chị M',
+                        leftActor: { icon: 'fa-user-check', name: 'Chị M', color: 'bg-emerald-500', speech: 'Không được! Tự ý bóc thư người khác là vi phạm pháp luật!' },
+                        centerAction: { icon: 'fa-shield-halved', label: 'Bảo vệ bí mật thư tín', badge: 'Đúng luật' },
+                        rightActor: { icon: 'fa-truck-fast', name: 'Hoàn trả bưu điện', color: 'bg-blue-500', speech: 'Cảm ơn chị M, tôi sẽ giao lại cho đúng người nhận!' },
+                        narration: 'Chị M kiên quyết từ chối lời rủ rê của đồng nghiệp và liên hệ trả lại bức thư cho bưu tá.'
+                    },
+                    {
+                        sceneTitle: 'Cảnh 3: Bạn X mượn điện thoại chị gái (Trường hợp 5 - SGK)',
+                        leftActor: { icon: 'fa-mobile-screen-button', name: 'Điện thoại chị gái', color: 'bg-indigo-500', speech: 'Ting! Bạn có 3 tin nhắn mới vừa gửi đến...' },
+                        centerAction: { icon: 'fa-eye-slash', label: 'Không tự ý mở xem', badge: 'Tôn trọng riêng tư' },
+                        rightActor: { icon: 'fa-face-smile-beam', name: 'Bạn X', color: 'bg-emerald-500', speech: 'Tin nhắn riêng của chị, mình không được tự ý bấm đọc!' },
+                        narration: 'Dù đang cầm điện thoại của chị gái, bạn X tuyệt đối không mở xem các tin nhắn riêng tư của chị.'
+                    }
+                ]
+            },
+            2: {
+                badge: 'Minh họa Ý 1.2 • Hành vi bị pháp luật nghiêm cấm',
+                title: 'Nghiêm cấm mọi hành vi tự ý xâm phạm thư tín, điện thoại',
+                headerColor: 'from-rose-600 to-red-700',
+                takeaway: 'Mọi hành vi tự ý xâm phạm an toàn và bí mật thư tín, điện thoại, điện tín của công dân đều bị nghiêm cấm.',
+                steps: [
+                    {
+                        sceneTitle: 'Cảnh 1: Những hành vi xâm phạm thường gặp trong đời sống',
+                        leftActor: { icon: 'fa-user-secret', name: 'Hành vi xâm phạm', color: 'bg-rose-600', speech: 'Lén mở điện thoại bạn thân, bóc thư người khác xem cho biết!' },
+                        centerAction: { icon: 'fa-triangle-exclamation', label: 'Xâm phạm trái phép', badge: 'Vi phạm' },
+                        rightActor: { icon: 'fa-book-skull', name: 'Ngụy biện sai lầm', color: 'bg-orange-600', speech: '"Người nhà, bạn bè thân thiết thì xem trộm có sao đâu!"' },
+                        narration: 'Nhiều người lầm tưởng cha mẹ, bạn thân hoặc đồng nghiệp thì có quyền tự ý đọc trộm tin nhắn, nhật ký, bóc thư của nhau.'
+                    },
+                    {
+                        sceneTitle: 'Cảnh 2: Lá chắn pháp luật ngăn chặn',
+                        leftActor: { icon: 'fa-gavel', name: 'Hiến pháp & Pháp luật', color: 'bg-blue-600', speech: 'Không một ai được tự ý bóc mở, thu giữ, tiêu hủy thư tín!' },
+                        centerAction: { icon: 'fa-ban', label: 'PHÁP LUẬT NGHIÊM CẤM', badge: 'Bất khả xâm phạm' },
+                        rightActor: { icon: 'fa-lock', name: 'An toàn thông tin', color: 'bg-emerald-600', speech: 'Mọi công dân đều bình đẳng về quyền bí mật riêng tư!' },
+                        narration: 'Trừ trường hợp cơ quan có thẩm quyền theo luật định, KHÔNG MỘT AI được phép tự ý bóc mở thư hay nghe lén, đọc trộm tin nhắn người khác.'
+                    }
+                ]
+            },
+            3: {
+                badge: 'Minh họa Ý 1.3 • Trường hợp ngoại lệ hợp pháp',
+                title: 'Khi nào cơ quan nhà nước được kiểm soát thư tín, điện thoại?',
+                headerColor: 'from-amber-600 to-orange-700',
+                takeaway: 'Việc kiểm soát thư tín, điện thoại, điện tín chỉ được thực hiện khi pháp luật có quy định, có quyết định của cơ quan nhà nước có thẩm quyền và đúng trình tự, thủ tục.',
+                steps: [
+                    {
+                        sceneTitle: 'Cảnh 1: Phát hiện dấu hiệu tội phạm nguy hiểm',
+                        leftActor: { icon: 'fa-user-ninja', name: 'Đối tượng tình nghi', color: 'bg-rose-600', speech: 'Sử dụng điện thoại, thư tín để liên lạc phạm tội...' },
+                        centerAction: { icon: 'fa-magnifying-glass', label: 'Yêu cầu điều tra', badge: 'An ninh quốc gia' },
+                        rightActor: { icon: 'fa-building-shield', name: 'Cơ quan điều tra', color: 'bg-blue-600', speech: 'Cần kiểm soát thông tin liên lạc để phá án kịp thời!' },
+                        narration: 'Để bảo vệ an ninh quốc gia và trật tự an toàn xã hội, cơ quan chức năng cần thu thập chứng cứ từ thư tín, điện thoại.'
+                    },
+                    {
+                        sceneTitle: 'Cảnh 2: Bắt buộc hội tụ đủ 3 điều kiện pháp lý',
+                        leftActor: { icon: 'fa-file-signature', name: 'Quyết định thẩm quyền', color: 'bg-amber-500', speech: 'Đã có phê duyệt bằng văn bản của cơ quan có thẩm quyền!' },
+                        centerAction: { icon: 'fa-key', label: 'Đủ 3 chốt khóa pháp lý', badge: 'Hợp pháp' },
+                        rightActor: { icon: 'fa-scale-balanced', name: 'Đúng trình tự, thủ tục', color: 'bg-emerald-600', speech: 'Thực hiện nghiêm ngặt theo Bộ luật Tố tụng Hình sự!' },
+                        narration: 'Việc kiểm soát không được làm tùy tiện mà phải có Quyết định của cơ quan nhà nước có thẩm quyền và tuân thủ đúng trình tự pháp luật.'
+                    }
+                ]
+            },
+            4: {
+                badge: 'Minh họa Ý 2.1 • Tình huống Nhóm 3 & Nhóm 4 trong Giáo án',
+                title: 'Hậu quả nặng nề từ việc xem trộm và phát tán tin nhắn',
+                headerColor: 'from-rose-600 to-pink-700',
+                takeaway: 'Gây hậu quả tiêu cực: xâm phạm đời sống riêng tư; ảnh hưởng xấu đến sức khỏe, tâm lí, danh dự, nhân phẩm, tiền bạc, học tập, công việc và trật tự quản lý.',
+                steps: [
+                    {
+                        sceneTitle: 'Tình huống Nhóm 3: Trò đùa ác ý trong giờ ra chơi',
+                        leftActor: { icon: 'fa-mobile-retro', name: 'Điện thoại của bạn T', color: 'bg-blue-500', speech: 'Để quên trong ngăn bàn, có tin nhắn biệt danh "Ông chã húi"...' },
+                        centerAction: { icon: 'fa-camera-rotate', label: 'Chụp & đăng lên nhóm lớp', badge: 'Vi phạm' },
+                        rightActor: { icon: 'fa-face-sad-cry', name: 'Hậu quả với bạn T', color: 'bg-rose-600', speech: 'T bị sốc tâm lý, xấu hổ trước cả lớp và phải nghỉ học nhiều ngày!' },
+                        narration: 'Chỉ vì tự ý đọc, chụp và phát tán tin nhắn riêng tư để "trêu đùa", nhóm bạn đã làm tổn thương danh dự, tâm lý và việc học tập của T, gây mất đoàn kết lớp.'
+                    },
+                    {
+                        sceneTitle: 'Tình huống Nhóm 4: Đọc trộm Zalo nơi công sở',
+                        leftActor: { icon: 'fa-laptop', name: 'Máy tính của anh K', color: 'bg-indigo-500', speech: 'Đi ra ngoài quên đăng xuất tài khoản Zalo cá nhân...' },
+                        centerAction: { icon: 'fa-copy', label: 'Đồng nghiệp P đọc & sao chép', badge: 'Lộ bí mật' },
+                        rightActor: { icon: 'fa-briefcase', name: 'Thiệt hại sự nghiệp', color: 'bg-amber-600', speech: 'Anh K bị lộ kế hoạch kinh doanh, công ty hiểu lầm và mất cơ hội thăng tiến!' },
+                        narration: 'Hành vi tò mò đọc trộm Zalo của P đã xâm phạm quyền riêng tư, gây thiệt hại trực tiếp đến uy tín, công việc và thu nhập của đồng nghiệp K.'
+                    }
+                ]
+            },
+            5: {
+                badge: 'Minh họa Ý 2.2 • 4 Chế tài xử phạt nghiêm minh',
+                title: 'Người vi phạm phải chịu trách nhiệm pháp lý gì?',
+                headerColor: 'from-indigo-600 to-slate-800',
+                takeaway: 'Tùy theo tính chất, mức độ vi phạm có thể bị xử lý kỷ luật, xử lý hành chính, xử lý hình sự và phải bồi thường thiệt hại (nếu có).',
+                steps: [
+                    {
+                        sceneTitle: 'Mức 1 & 2: Xử lý Kỷ luật và Xử phạt Hành chính',
+                        leftActor: { icon: 'fa-school-circle-exclamation', name: '1. Xử lý Kỷ luật', color: 'bg-slate-600', speech: 'Khiển trách, cảnh cáo, hạ hạnh kiểm hoặc kỷ luật theo nội quy công ty!' },
+                        centerAction: { icon: 'fa-arrow-right-arrow-left', label: 'Tùy mức độ vi phạm', badge: 'Chế tài' },
+                        rightActor: { icon: 'fa-file-invoice-dollar', name: '2. Phạt Hành chính', color: 'bg-amber-600', speech: 'Phạt tiền từ 20.000.000đ đến 50.000.000đ!' },
+                        narration: 'Ngay cả khi chưa đến mức truy cứu hình sự, người vi phạm đã phải đối mặt với kỷ luật của nhà trường/cơ quan và mức phạt tiền rất cao.'
+                    },
+                    {
+                        sceneTitle: 'Mức 3 & 4: Xử lý Hình sự và Bồi thường Dân sự',
+                        leftActor: { icon: 'fa-handcuffs', name: '3. Xử lý Hình sự (Điều 159)', color: 'bg-rose-600', speech: 'Phạt cải tạo không giam giữ hoặc phạt tù lên đến 3 năm!' },
+                        centerAction: { icon: 'fa-scale-balanced', label: 'Công lý nghiêm minh', badge: 'Răn đe' },
+                        rightActor: { icon: 'fa-hand-holding-dollar', name: '4. Trách nhiệm Dân sự', color: 'bg-blue-600', speech: 'Bắt buộc bồi thường thiệt hại về vật chất và tinh thần cho nạn nhân!' },
+                        narration: 'Nếu gây hậu quả nghiêm trọng, người vi phạm có thể bị phạt tù đến 3 năm và phải đền bù mọi thiệt hại gây ra.'
+                    }
+                ]
+            }
+        };
+
+        let currentModalId = 1;
+        let currentModalStep = 0;
+
+        function openIllustrationModal(noteId) {
+            playSound('shield');
+            currentModalId = noteId;
+            currentModalStep = 0;
+
+            // Also sync the left stage simulator
+            if (noteId <= 3) {
+                setSim1Scene(noteId);
+            } else {
+                setSim2Scene(noteId - 3);
+            }
+
+            const modal = document.getElementById('illustrationModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            renderModalStep();
+        }
+
+        function closeIllustrationModal() {
+            playSound('click');
+            const modal = document.getElementById('illustrationModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function renderModalStep() {
+            const story = illustrationStories[currentModalId];
+            const stepData = story.steps[currentModalStep];
+
+            document.getElementById('modalHeader').className = `bg-gradient-to-r ${story.headerColor} px-6 py-4 text-white flex items-center justify-between`;
+            document.getElementById('modalBadge').textContent = story.badge;
+            document.getElementById('modalTitle').textContent = story.title;
+            document.getElementById('modalLessonTakeaway').textContent = story.takeaway;
+
+            const stage = document.getElementById('modalAnimStage');
+            stage.innerHTML = `
+                <div class="flex items-center justify-between border-b border-slate-700/80 pb-2.5 mb-3">
+                    <span class="text-xs font-extrabold text-amber-300 uppercase tracking-wider">
+                        <i class="fa-solid fa-film mr-1.5"></i>${stepData.sceneTitle}
+                    </span>
+                    <span class="text-xs bg-white/10 px-2.5 py-0.5 rounded-full text-slate-300 font-semibold">
+                        Cảnh ${currentModalStep + 1} / ${story.steps.length}
+                    </span>
+                </div>
+
+                <!-- Animated 3-Column Comic Strip -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center my-auto py-2">
+                    <!-- Left Character -->
+                    <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-3.5 text-center flex flex-col items-center">
+                        <div class="w-12 h-12 rounded-2xl ${stepData.leftActor.color} flex items-center justify-center text-white text-xl shadow-lg mb-2 animate-float">
+                            <i class="fa-solid ${stepData.leftActor.icon}"></i>
+                        </div>
+                        <div class="text-xs font-extrabold text-white">${stepData.leftActor.name}</div>
+                        <div class="mt-2 bg-slate-950/80 text-slate-200 text-[11px] p-2 rounded-xl border border-slate-700 italic leading-relaxed">
+                            "${stepData.leftActor.speech}"
+                        </div>
+                    </div>
+
+                    <!-- Center Action / Symbol -->
+                    <div class="flex flex-col items-center justify-center text-center p-2">
+                        <div class="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500/30 to-indigo-500/30 border-2 border-blue-400 flex items-center justify-center text-2xl text-amber-300 shadow-lg animate-shield mb-2">
+                            <i class="fa-solid ${stepData.centerAction.icon}"></i>
+                        </div>
+                        <span class="text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/40">
+                            ${stepData.centerAction.badge}
+                        </span>
+                        <div class="text-xs font-bold text-slate-200 mt-1">${stepData.centerAction.label}</div>
+                    </div>
+
+                    <!-- Right Character -->
+                    <div class="bg-slate-800/90 border border-slate-700 rounded-2xl p-3.5 text-center flex flex-col items-center">
+                        <div class="w-12 h-12 rounded-2xl ${stepData.rightActor.color} flex items-center justify-center text-white text-xl shadow-lg mb-2 animate-float">
+                            <i class="fa-solid ${stepData.rightActor.icon}"></i>
+                        </div>
+                        <div class="text-xs font-extrabold text-white">${stepData.rightActor.name}</div>
+                        <div class="mt-2 bg-slate-950/80 text-slate-200 text-[11px] p-2 rounded-xl border border-slate-700 italic leading-relaxed">
+                            "${stepData.rightActor.speech}"
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Voiceover / Narration Bar -->
+                <div class="mt-3 bg-blue-950/70 border border-blue-400/30 rounded-xl p-3 text-xs text-blue-100 flex items-center gap-2.5">
+                    <i class="fa-solid fa-volume-high text-amber-300 text-base shrink-0"></i>
+                    <span><strong>Thuyết minh tình huống:</strong> ${stepData.narration}</span>
+                </div>
+            `;
+
+            // Render Step Dots
+            const dots = document.getElementById('modalStepDots');
+            dots.innerHTML = story.steps.map((_, idx) => `
+                <button onclick="jumpModalStep(${idx})" class="h-2.5 rounded-full transition-all ${idx === currentModalStep ? 'w-8 bg-blue-600' : 'w-2.5 bg-slate-300 hover:bg-slate-400'}"></button>
+            `).join('');
+
+            // Update Prev/Next buttons
+            document.getElementById('prevStepBtn').disabled = currentModalStep === 0;
+            document.getElementById('prevStepBtn').className = currentModalStep === 0
+                ? 'px-3.5 py-2 rounded-xl bg-slate-100 text-slate-400 border border-slate-200 font-bold text-xs cursor-not-allowed flex items-center gap-1.5'
+                : 'px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold text-xs transition flex items-center gap-1.5';
+
+            const nextBtn = document.getElementById('nextStepBtn');
+            if (currentModalStep < story.steps.length - 1) {
+                nextBtn.innerHTML = '<span>Cảnh tiếp theo</span> <i class="fa-solid fa-forward-step"></i>';
+                nextBtn.onclick = nextModalStep;
+            } else {
+                nextBtn.innerHTML = '<i class="fa-solid fa-check"></i> <span>Đã hiểu & Đóng</span>';
+                nextBtn.onclick = closeIllustrationModal;
+            }
+        }
+
+        function prevModalStep() {
+            if (currentModalStep > 0) {
+                playSound('click');
+                currentModalStep--;
+                renderModalStep();
+            }
+        }
+
+        function nextModalStep() {
+            const story = illustrationStories[currentModalId];
+            if (currentModalStep < story.steps.length - 1) {
+                playSound('shield');
+                currentModalStep++;
+                renderModalStep();
+            }
+        }
+
+        function jumpModalStep(idx) {
+            playSound('click');
+            currentModalStep = idx;
+            renderModalStep();
+        }
+
+        // ==========================================
+        // INITIALIZE ON WINDOW LOAD
+        // ==========================================
+        window.onload = function () {
+            initKeywordTags();
+            renderSim1Stage();
+            renderSim2Stage();
+            initClozeGame();
+            updateTimerUI();
+        };
+    </script>
+</body>
+</html>
